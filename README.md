@@ -21,7 +21,7 @@ El servidor estará corriendo en las siguientes URLs:
 
 ### Ejemplos de Funcionalidad
 
-- **Obtener todos los productos**: Se llamará desde el navegador a la URL [http://localhost:8080/products](http://localhost:8080/products) sin incluir ninguna query. Esto devolverá todos los 10 productos.
+- **Obtener todos los productos**: Se llamará desde el navegador a la URL [http://localhost:8080/products](http://localhost:8080/products) sin incluir ninguna query. Esto devolverá todos los productos.
 
 - **Obtener un número específico de productos**: Se llamará desde el navegador a la URL [http://localhost:8080/products?limit=5](http://localhost:8080/products?limit=5). Esto devolverá solo los primeros 5 de los 10 productos.
 
