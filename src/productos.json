@@ -106,5 +106,19 @@
     "thumbnail": "Sin imagen",
     "code": "ddd333",
     "stock": 40
+  },
+  {
+    "id": 13,
+    "title": "Producto por postman",
+    "description": "Descripcion producto postman",
+    "code": "eee111",
+    "price": 7000,
+    "status": false,
+    "stock": 50,
+    "category": "Electrónicos",
+    "thumbnail": [
+      "imagen1.jpg",
+      "imagen2.jpg"
+    ]
   }
 ]
