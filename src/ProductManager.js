@@ -18,8 +18,7 @@ class ProductManager {
         const textFields = typeof title === 'string' && typeof description === 'string' && typeof code === 'string' && typeof category === 'string';
         const numberFields = typeof price === 'number' && price > 0 && typeof stock === 'number' && stock >= 0;
         const statusField = typeof status === 'boolean';
-        const thumbnailField = Array.isArray(thumbnail) && thumbnail.every(item => typeof item === 'string');
-        const validateFields = requiredFields && textFields && numberFields && statusField && thumbnailField;
+        const validateFields = requiredFields && textFields && numberFields && statusField;
     
         if (!validateFields) {
             console.log('Faltan campos obligatorios o algunos campos no tienen el formato correcto');
@@ -76,7 +75,6 @@ class ProductManager {
         const productPath = await this.productPath;
         const data = await fs.promises.readFile(productPath, 'utf-8');
         const productsFile = JSON.parse(data)
-        console.log(productsFile);
         return productsFile
     }
 

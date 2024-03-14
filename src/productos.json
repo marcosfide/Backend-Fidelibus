@@ -64,61 +64,90 @@
   },
   {
     "id": 8,
-    "title": "Producto prueba 8",
-    "description": "Este es el 8vo producto prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
+    "title": "producto prueba 8",
+    "description": "Este es 8vo producto prueba\t",
     "code": "ccc222",
-    "stock": 55
+    "price": 200,
+    "status": true,
+    "stock": 125,
+    "category": "prod",
+    "thumbnail": "/public/img.jpg"
   },
   {
     "id": 9,
     "title": "producto prueba 9",
-    "description": "Este es el 9no producto prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
+    "description": "Este es 9no producto prueba\t",
     "code": "ccc333",
-    "stock": 20
+    "price": 125,
+    "status": true,
+    "stock": 10,
+    "category": "prod",
+    "thumbnail": "/images"
   },
   {
     "id": 10,
     "title": "producto prueba 10",
-    "description": "Este es 10mo producto prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
+    "description": "Este es 10mo producto prueba\t",
     "code": "ddd111",
-    "stock": 45
+    "price": 125,
+    "status": true,
+    "stock": 125,
+    "category": "prod",
+    "thumbnail": "/public/img.jpg"
   },
   {
     "id": 11,
-    "title": "producto prueba 11",
-    "description": "Este es el 11vo producto prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
-    "code": "ddd222",
-    "stock": 35
+    "title": "Producto por postman",
+    "description": "Descripcion producto postman",
+    "code": "eee333",
+    "price": 3000,
+    "status": true,
+    "stock": 25,
+    "category": "Electronico",
+    "thumbnail": "/asdf/asf"
   },
   {
     "id": 12,
-    "title": "producto prueba 12",
-    "description": "Este es 12vo producto prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
-    "code": "ddd333",
-    "stock": 40
+    "title": "prueba",
+    "description": "prueba",
+    "code": "prueba",
+    "price": 33,
+    "status": true,
+    "stock": 33,
+    "category": "33",
+    "thumbnail": "33"
   },
   {
     "id": 13,
     "title": "Producto por postman",
     "description": "Descripcion producto postman",
-    "code": "eee111",
-    "price": 7000,
-    "status": false,
-    "stock": 50,
-    "category": "Electrónicos",
-    "thumbnail": [
-      "imagen1.jpg",
-      "imagen2.jpg"
-    ]
+    "code": "eee334",
+    "price": 3000,
+    "status": true,
+    "stock": 25,
+    "category": "Electronico",
+    "thumbnail": "/asdf/asf"
+  },
+  {
+    "id": 14,
+    "title": "prueba",
+    "description": "prueba",
+    "code": "pruebaee",
+    "price": 4,
+    "status": true,
+    "stock": 4,
+    "category": "prueba",
+    "thumbnail": "prueba"
+  },
+  {
+    "id": 15,
+    "title": "Producto por postman",
+    "description": "Descripcion producto postman",
+    "code": "eee335",
+    "price": 3000,
+    "status": true,
+    "stock": 25,
+    "category": "Electronico",
+    "thumbnail": "/asdf/asf"
   }
 ]

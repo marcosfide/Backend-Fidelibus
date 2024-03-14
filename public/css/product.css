@@ -1,0 +1,61 @@
+h1{
+    text-align: center;
+}
+div.card-product{
+    & ul{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        margin: 5px;
+        padding: 8px;
+        & li{
+            width: 24vw;
+            min-width: 240px;
+            margin: 5px;
+            padding: 8px;
+        }
+    }
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 18rem;
+    margin: auto;
+}
+label{
+    margin-top: 6px;
+}
+
+button{
+    margin-top: 8px;
+}
+
+table{
+    width: 88%;
+    margin: auto;
+    & thead{
+        font-weight: bold;
+    }
+}
+
+.products-list{
+    border: solid 1px black;
+    border-radius: 5px;
+    width: 90%;
+    margin: auto;
+
+}
+
+.product-form{
+    border: solid 1px black;
+    border-radius: 5px;
+    width: 20rem;
+    margin: auto;
+    margin-top: 10px;
+    padding-bottom: 8px;
+}
+
+.btn-eliminar{
+    width: 8rem;
+}

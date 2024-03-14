@@ -1,0 +1,1 @@
+console.log('saludo desde product.js');
