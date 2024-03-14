@@ -107,17 +107,6 @@
     "thumbnail": "/asdf/asf"
   },
   {
-    "id": 12,
-    "title": "prueba",
-    "description": "prueba",
-    "code": "prueba",
-    "price": 33,
-    "status": true,
-    "stock": 33,
-    "category": "33",
-    "thumbnail": "33"
-  },
-  {
     "id": 13,
     "title": "Producto por postman",
     "description": "Descripcion producto postman",

@@ -15,14 +15,26 @@ nodemon src/App.js
 
 El servidor estará corriendo en las siguientes URLs:
 
-- [http://localhost:8080/products](http://localhost:8080/products)
-- [http://localhost:8080/products?limit=5](http://localhost:8080/products?limit=5)
-- [http://localhost:8080/products/{id}](http://localhost:8080/products/{id})
+URLs para obtener los json de los productos:
+
+- [http://localhost:8080/api/products](http://localhost:8080/api/products)
+- [http://localhost:8080/api/products?limit=5](http://localhost:8080/api/products?limit=5)
+- [http://localhost:8080/api/products/3](http://localhost:8080/api/products/3)
+
+URLs para obtener los HTML con las tarjetas de productos:
+
+- [http://localhost:8080/home](http://localhost:8080/home)
+- [http://localhost:8080/product/3](http://localhost:8080/product/3)
+
+URL con listado para visualizar y/o eliminar productos y formulario para agregar un nuevo producto en tiempo real (también puede ser utilizada con postman):
+
+- [http://localhost:8080/realTimeProducts](http://localhost:8080/realTimeProducts)
+
 
 ### Ejemplos de Funcionalidad
 
-- **Obtener todos los productos**: Se llamará desde el navegador a la URL [http://localhost:8080/products](http://localhost:8080/products) sin incluir ninguna query. Esto devolverá todos los productos.
+- **Obtener todos los productos**: Se llamará desde el navegador a la URL [http://localhost:8080/api/products](http://localhost:8080/api/products) sin incluir ninguna query. Esto devolverá todos los productos.
 
-- **Obtener un número específico de productos**: Se llamará desde el navegador a la URL [http://localhost:8080/products?limit=5](http://localhost:8080/products?limit=5). Esto devolverá solo los primeros 5 de los 10 productos.
+- **Obtener un número específico de productos**: Se llamará desde el navegador a la URL [http://localhost:8080/api/products?limit=5](http://localhost:8080/api/products?limit=5). Esto devolverá solo los primeros 5 productos.
 
-- **Obtener un producto por su ID**: Se llamará desde el navegador a la URL [http://localhost:8080/products/2](http://localhost:8080/products/2). Esto devolverá solo el producto con ID igual a 2.
+- **Obtener un producto por su ID**: Se llamará desde el navegador a la URL [http://localhost:8080/api/products/3](http://localhost:8080/api/products/2). Esto devolverá solo el producto con ID igual a 2.
