@@ -1,10 +1,6 @@
 const { Router } = require('express')
 
-const ProductManager = require('../ProductManager');
-
 const router = Router();
-
-const productManager = new ProductManager('./src/productos.json');
 
 
 router.get('/', (_, res) => {
@@ -19,6 +15,7 @@ router.get('/', (_, res) => {
 
 // Ruta para obtener todos los productos o limitar la cantidad y renderizarlo
 router.get('/home', async (req, res) => {
+    const productManager = req.app.get('productManager')
     try {
         const products = await productManager.getProducts();
         
@@ -37,11 +34,8 @@ router.get('/home', async (req, res) => {
 
 // Ruta para obtener un producto por Id y renderizarlo
 router.get('/product/:pid', async (req, res) => {
-    const productId = parseInt(req.params.pid);
-    if (isNaN(productId) || productId <= 0) {
-        res.status(400).json({ error: 'El Id del producto debe ser un número entero positivo.' })
-        return;
-    }
+    const productManager = req.app.get('productManager')
+    const productId = req.params.pid;
 
     const product = await productManager.getProductById(productId);
     if (!product) {
@@ -49,16 +43,18 @@ router.get('/product/:pid', async (req, res) => {
         return;
     }
 
+    const productData = Object.assign({}, product.toJSON());
     res.render('product', {
-        title:'Producto por id',
-        product: product,
+        title: 'Producto por id',
+        product: productData,
         styles: [
             'product.css'
         ],
         scripts: [
             'product.js'
         ]
-    })
+    });
+
 });
 
 

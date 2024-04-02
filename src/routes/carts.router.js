@@ -1,14 +1,11 @@
 const { Router } = require('express')
 
-const ProductManager = require('../ProductManager');
-
 const router = Router();
 
 
-const productManager = new ProductManager('./src/carritos.json');
-
 // Ruta para crear un nuevo carrito
 router.post('/', (req, res) =>{
+    const productManager = req.app.get('productManager')
 
     productManager.addCart()
 
@@ -17,31 +14,29 @@ router.post('/', (req, res) =>{
 
 // Ruta para obtener los productos del carrito por id
 router.get('/:cid', async (req, res) => {
-    const cartId = parseInt(req.params.cid)
-    if (cartId <= 0) {
-        res.status(400).json({ error: 'El Id del producto debe ser un número entero positivo.' })
-        return;
-    }
+    const productManager = req.app.get('productManager')
+    const cartId = req.params.cid
 
-    const cart = await productManager.getCartById(cartId);
-    
-    if (!cart) {
-        res.status(400).json({ error: 'cart no encontrado.' })
-        return;
+    try {
+        const cart = await productManager.getCartById(cartId);
+        
+        if (!cart) {
+            res.status(400).json({ error: 'cart no encontrado.' });
+            return;
+        }
+        
+        res.status(200).json(cart);
+        
+    }  catch (error) {
+        res.status(500).json({ error: 'Error al buscar el cart por id. Id inapropiado' });
     }
-
-    res.status(200).json(cart);
 });
 
 // Ruta para agregar el producto al arreglo products del carrito seleccionado por id
 router.post('/:cid/product/:pid', async (req, res) => {
-    const cartId = parseInt(req.params.cid)
-    const productId = parseInt(req.params.pid)
-
-    if (isNaN(cartId) || isNaN(productId) || cartId <= 0 || productId <= 0) {
-        res.status(400).json({ error: 'El Id del carrito y del producto deben ser números enteros positivos.' });
-        return;
-    }
+    const productManager = req.app.get('productManager')
+    const cartId = req.params.cid;
+    const productId = req.params.pid;
 
     try {
         // Obtener el carrito y el producto correspondientes a los IDs proporcionados
@@ -59,14 +54,16 @@ router.post('/:cid/product/:pid', async (req, res) => {
         }
 
         // Verificar si el producto ya está en el carrito
-        const existingProductIndex = cart.products.findIndex(item => item.product === productId);
+        const existingProductIndex = cart.products.findIndex(item => item._id.toString() === productId);
+        console.log(existingProductIndex);
         if (existingProductIndex !== -1) {
             // Si el producto ya está en el carrito, incrementar la cantidad
             cart.products[existingProductIndex].quantity++;
         } else {
             // Si el producto no está en el carrito, agregarlo al arreglo "products" del carrito
-            cart.products.push({ product: productId, quantity: 1 });
+            cart.products.push({ _id: productId, quantity: 1 });
         }
+
 
         // Guardar el carrito actualizado
         await productManager.updateCart(cartId, cart);

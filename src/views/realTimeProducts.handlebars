@@ -15,7 +15,7 @@
             </thead>
             <tbody class="container" id="productsFeed">
                 {{#each products}}
-                    <tr data-product-id="{{this.id}}">
+                    <tr data-product-id="{{this._id}}">
                         <td> {{this.title}}</td>
                         <td> {{this.description}}</td>
                         <td> {{this.price}}</td>
@@ -23,7 +23,7 @@
                         <td> {{this.thumbnail}}</td>
                         <td> {{this.code}}</td>
                         <td>
-                            <form method="post" action="/realTimeProducts/{{this.id}}?_method=DELETE"  class="btn-eliminar">
+                            <form method="post" action="/realTimeProducts/{{this._id}}?_method=DELETE"  class="btn-eliminar">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button type="submit">Eliminar</button>
                             </form>

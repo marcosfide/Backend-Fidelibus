@@ -116,27 +116,5 @@
     "stock": 25,
     "category": "Electronico",
     "thumbnail": "/asdf/asf"
-  },
-  {
-    "id": 14,
-    "title": "prueba",
-    "description": "prueba",
-    "code": "pruebaee",
-    "price": 4,
-    "status": true,
-    "stock": 4,
-    "category": "prueba",
-    "thumbnail": "prueba"
-  },
-  {
-    "id": 15,
-    "title": "Producto por postman",
-    "description": "Descripcion producto postman",
-    "code": "eee335",
-    "price": 3000,
-    "status": true,
-    "stock": 25,
-    "category": "Electronico",
-    "thumbnail": "/asdf/asf"
   }
 ]

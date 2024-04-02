@@ -14,7 +14,7 @@ class ProductManager {
     }
 
     async addProduct({ title, description, code, price, status = true, stock, category, thumbnail = []}) {
-        const requiredFields = title && description && code && price && status && stock && category;
+        const requiredFields = title && description && code && price && stock && category;
         const textFields = typeof title === 'string' && typeof description === 'string' && typeof code === 'string' && typeof category === 'string';
         const numberFields = typeof price === 'number' && price > 0 && typeof stock === 'number' && stock >= 0;
         const statusField = typeof status === 'boolean';
