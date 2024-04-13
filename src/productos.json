@@ -116,5 +116,16 @@
     "stock": 25,
     "category": "Electronico",
     "thumbnail": "/asdf/asf"
+  },
+  {
+    "id": 12,
+    "title": "FormProd",
+    "description": "prodformws",
+    "code": "ppf333",
+    "price": 160,
+    "status": false,
+    "stock": 20,
+    "category": "producc",
+    "thumbnail": "/public/img.jpg"
   }
 ]

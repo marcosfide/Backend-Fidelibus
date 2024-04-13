@@ -1,28 +1,21 @@
 const { Router } = require('express')
 
-const ProductManager = require('../dao/fileManager/ProductManager');
-
 const router = Router();
-
-const productManager = new ProductManager('./src/productos.json');
 
 
 // Ruta para acceder al form de datos del producto a agregar
 router.get('/', async (req, res) => {
+    const productManager = req.app.get('productManager')
     try {       
         const products = await productManager.getProducts();
         
-        res.render('realTimeProducts', { // Renderizamos el listado y form
+        res.render('managerDBProductsView', { // Renderizamos el listado y form
             products: products,
             title: 'Agregar producto',
             styles: [
                 'product.css'
             ],
-            title:'Websockets',
-            useWS: true,
-            scripts: [
-                'realTimeProducts.js'
-            ]
+            title:'Product Manager'
         });
     } catch (error) {
         console.error("Error al obtener productos:", error);
@@ -32,6 +25,7 @@ router.get('/', async (req, res) => {
 
 // Ruta para agregar un producto
 router.post('/', async(req, res) => {
+    const productManager = req.app.get('productManager')
     const product = req.body
     
     product.price = parseInt(product.price)
@@ -75,9 +69,6 @@ router.post('/', async(req, res) => {
     // 1ro Agregar el producto con el productManager
     await productManager.addProduct(product)
 
-    // 2do Notificar a los clientes(browsers) mediante WS que se agrrego un nuevo producto
-    req.app.get('ws').emit('newProduct', product)
-
 
     res.status(201).json({status: 'success', product})
 
@@ -86,27 +77,17 @@ router.post('/', async(req, res) => {
 
 // Ruta para eliminar un producto
 router.delete('/:pid', async(req, res) =>{
-    const productId = parseInt(req.params.pid);
-    if (isNaN(productId) || productId <= 0) {
-        res.status(400).json({ error: 'El Id del producto debe ser un número entero positivo.' })
-        return;
+    try {
+        const productManager = req.app.get('productManager')
+        await productManager.deleteProductById(req.params.pid)
+
+        res.status(200).json({ success: true })
     }
-
-    const product = await productManager.getProductById(productId);
-    if (!product) {
-        res.status(400).json({ error: 'Producto no encontrado.' })
-        return;
+    catch (err) {
+        return res.status(500).json({ success: false })
     }
-
-    productManager.deleteProduct(productId)
-
-    // Notificar a los clientes(browsers) mediante WS que se agrrego un nuevo producto
-    req.app.get('ws').emit('productDeleted', product)
-
-
-    res.status(201).json({status: 'success', product})
-
 })
+
 
 
 module.exports = router

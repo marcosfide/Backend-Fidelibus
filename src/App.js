@@ -7,7 +7,8 @@ const mongoose = require('mongoose')
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/carts.router');
 const viewsRouter = require('./routes/views.router');
-const realTimeProductsRouter = require('./routes/realTimeProducts.router');
+const realTimeProductsRouter = require('./routes/realTimeProducts.router')
+const managerDBProductsViewRouter = require('./routes/managerDBProductsView.router');
 const chatRouter = require('./routes/chat.router');
 
 
@@ -37,6 +38,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
 app.use('/realTimeProducts', realTimeProductsRouter);
+app.use('/managerDBProductsView', managerDBProductsViewRouter);
 app.use('/chat', chatRouter);
 
 
@@ -55,6 +57,7 @@ const main = async () => {
     });
 
     const io = new Server(httpServer);
+    app.set('ws', io)
 
     const messageHistory = []
 
