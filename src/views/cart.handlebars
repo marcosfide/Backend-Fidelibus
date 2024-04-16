@@ -1,0 +1,19 @@
+<h1>{{ title }}</h1>
+<div class="card-product">
+    <ul>
+        {{#each cartProducts}}
+        <script>console.log(cartProducts)</script>
+            <li>
+                <h3>Producto: {{this.product.title}}</h3>
+                <h3>Cantidad: {{this.quantity}}</h3>
+                <h3>Precio: ${{this.product.price}}</h3>
+                <h4>Descripción: {{this.product.description}}</h4>
+                <h4>Categoría: {{this.product.category}}</h4>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+
+
+<script src="/js/product.js"></script>

@@ -1,0 +1,26 @@
+
+<h1>{{ title }}</h1>
+<div class="card-product">
+    <ul>
+        <script>console.log(products)</script>
+        {{#each products}}
+            <li>
+                <h1>Nombre: {{this.title}}</h1>
+                <h4>Descripción: {{this.description}}</h4>
+                <h4>Precio: {{this.price}}</h4>
+                <h4>Stock: {{this.stock}}</h4>
+                <h4>Imagen: {{this.thumbnail}}</h4>
+                <h4>Codigo: {{this.code}}</h4>
+                <button>Agregar al carrito</button>
+            </li>
+        {{/each}}
+    </ul>
+    <div class="div-pagination">
+        <h5><a href="{{prevLink}}">Página Anterior</a></h5>
+        <h5>Página {{page}} de {{totalPages}}</h5>
+        <h5><a href="{{nextLink}}">Página Siguiente</a></h5>
+    </div>
+</div>
+
+
+<script src="/js/product.js"></script>

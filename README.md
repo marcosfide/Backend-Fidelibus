@@ -29,17 +29,35 @@ npm install socket.io
 
 El servidor estará corriendo en las siguientes URLs:
 
-URLs api/products para obtener los json de los productos:
-
+URLs api/products para obtener el json del pagination de los productos:
 - [http://localhost:8080/api/products](http://localhost:8080/api/products)
+
+URLs api/products?limit=x para filtrar los productos por cantidad:
 - [http://localhost:8080/api/products?limit=5](http://localhost:8080/api/products?limit=5)
+
+URLs api/products/id para filtrar por id de producto:
 - [http://localhost:8080/api/products/6606ce83e69eb87a91d699df](http://localhost:8080/api/products/6606ce83e69eb87a91d699df)
 
-URLs api/products para utilizar los metodos post, put y delete(desde postman o utilizando el form):
+URLs api/products?category=categoría para filtrar por categoría:
+- [http://localhost:8080/api/products?category=mates](http://localhost:8080/api/products?category=mates)
 
-- Metodo POST para agregar producto: - [http://localhost:8080/api/products]
-- Metodo PUT para modificar un producto: - [http://localhost:8080/api/products/660b5d672a4e9b1c5c7f6636]
-- Metodo DELETE para eliminar un producto: - [http://localhost:8080/api/products/660b5e028aa1b8bf4593e1e3]
+URLs api/products=availability=s/n para filtrar por disponibilidad de stock:
+- [http://localhost:8080/api/products?availability=s](http://localhost:8080/api/products?availability=s)
+- [http://localhost:8080/api/products?availability=n](http://localhost:8080/api/products?availability=n)
+
+URLs api/products?sort=asc/desc para ordenar por precio:
+- [http://localhost:8080/api/products?sort=asc](http://localhost:8080/api/products?sort=asc)
+- [http://localhost:8080/api/products?sort=desc](http://localhost:8080/api/products?sort=desc)
+
+URLs api/products?page=x para buscar por página:
+- [http://localhost:8080/api/products?page=2](http://localhost:8080/api/products?page=2)
+
+
+URLs api/products para utilizar los metodos post, put y delete(desde postman):
+
+- Metodo POST para agregar producto(pasando los campos del producto por body): - [http://localhost:8080/api/products]
+- Metodo PUT para modificar un producto(pasando el id como parametro y los campos a modificar con sus respectivos valores por body): - [http://localhost:8080/api/products/661f0a279347e792679225a3]
+- Metodo DELETE para eliminar un producto(pasando el id del producto a eliminar como parametro): - [http://localhost:8080/api/products/661f0bd447d15e916fb80437]
 
 
 URLs para obtener los HTML con las tarjetas de productos:

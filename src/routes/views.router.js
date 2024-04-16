@@ -57,5 +57,64 @@ router.get('/product/:pid', async (req, res) => {
 
 });
 
+// Ruta para obtener todos los productos o filtrados por parametros
+router.get('/products', async (req, res) => {
+    try {
+        const productManager = req.app.get('productManager');
+        const products = await productManager.getProducts(req.query);
+        console.log(products.docs);
+        const baseUrl = req.baseUrl;
+        const queryParams = req.query;
+
+        // Obtener los enlaces previo y siguiente
+        const prevLink = await productManager.buildPrevLink(baseUrl, queryParams, products.page);
+        const nextLink = await productManager.buildNextLink(baseUrl, queryParams, products.page, products.totalPages);
+
+        res.render('products', {
+            products: products.docs,
+            prevLink: prevLink ? `http://localhost:8080/products${prevLink}` : null,
+            nextLink: nextLink ? `http://localhost:8080/products${nextLink}` : null,
+            page: products.page,
+            totalPages: products.totalPages,
+            styles: [
+                'product.css'
+            ],
+        });
+        return products
+    } catch (error) {
+        console.error("Error al obtener productos:", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
+// Ruta para obtener cart por id
+router.get('/carts/:cid', async (req, res) => {
+    const cartManager = req.app.get('cartManager')
+    const cartId = req.params.cid
+
+    try {
+        const cart = await cartManager.getCartById(cartId);
+        
+        if (!cart) {
+            res.status(400).json({ error: 'cart no encontrado.' });
+            return;
+        }
+        console.log(cart.products); // Verifica los datos antes de renderizar
+        res.render('cart', {
+            cartProducts: cart.products,
+            title: 'Cart', // Puedes incluir un título aquí
+            styles: [
+                'product.css'
+            ],
+        });
+
+        return cart
+
+    } catch (error) {
+        console.error("Error al obtener el cart:", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
 
 module.exports = router

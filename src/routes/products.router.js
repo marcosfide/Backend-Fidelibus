@@ -22,33 +22,35 @@ router.get('/:pid', async (req, res) => {
     }
 });
 
-// Ruta para obtener todos los productos o limitar la cantidad
+// Ruta para obtener todos los productos o filtrarlos
 router.get('/', async (req, res) => {
-    const productManager = req.app.get('productManager');
-    let limit = req.query.limit;
-    let products;
-
     try {
-        // Verifico si se proporcionó un parámetro de consulta "limit"
-        if (limit !== undefined) {
-            limit = parseInt(limit); // Convertir a entero
-            // Verificar si el valor de "limit" es un número válido
-            if (isNaN(limit) || limit <= 0) {
-                res.status(400).json({ error: 'El parámetro de consulta "limit" debe ser un número entero positivo.' });
-                return;
-            }
-            // obtengo los productos con el límite proporcionado
-            const allProducts = await productManager.getProducts();
-            products = allProducts.slice(0, limit);
-        } else {
-            // si no se proporciona "limit", traigo todos los productos
-            products = await productManager.getProducts();
-        }
+        const productManager = req.app.get('productManager');
+        const products = await productManager.getProducts(req.query);
 
-        res.status(200).json(products);
+        const baseUrl = req.baseUrl;
+        const queryParams = req.query;
+
+        // Obtener los enlaces previo y siguiente
+        const prevLink = await productManager.buildPrevLink(baseUrl, queryParams, products.page);
+        const nextLink = await productManager.buildNextLink(baseUrl, queryParams, products.page, products.totalPages);
+
+        // Enviar los enlaces en la respuesta
+        res.status(201).json({
+            status: 'success',
+            payload: products.docs,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: prevLink? `http://localhost:8080${prevLink}` : null,
+            nextLink: nextLink ? `http://localhost:8080${nextLink}` : null,
+        });
     } catch (error) {
         console.error('Error al obtener los productos:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+        res.status(500).json({ status: 'error', error: 'Error interno del servidor.' });
     }
 });
 
@@ -56,48 +58,15 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const productManager = req.app.get('productManager');
     const product = req.body;
-    
-    product.price = parseInt(product.price);
-    product.stock = parseInt(product.stock);
-    product.status ? product.status = true : product.status = false;
 
     try {
-        const requiredFields = product.title && product.description && product.code && product.price && product.stock && product.category;
-        const textFields = typeof product.title === 'string' && typeof product.description === 'string' && typeof product.code === 'string' && typeof product.category === 'string';
-        const numberFields = typeof product.price === 'number' && product.price > 0 && typeof product.stock === 'number' && product.stock >= 0;
-        const statusField = typeof product.status === 'boolean';
+        const result = await productManager.addProduct(product);
 
-        const productsFile = await productManager.getProducts();
-        const isInProducts = productsFile.some(prod => prod.code === product.code);
-
-        if (isInProducts) {
-            res.status(400).json({ error: `El código de producto ${product.code} ya se encuentra en products` });
-            return;
+        if (result.error) {
+            res.status(400).json({ error: result.error });
+        } else {
+            res.status(201).json({ status: 'success', product });
         }
-
-        if (!requiredFields) {
-            res.status(400).json({ error: "Todos los campos deben tener valores." });
-            return;
-        }
-
-        if (!textFields) {
-            res.status(400).json({ error: "Los campos title, description, code y category deben ser string." });
-            return;
-        }
-
-        if (!numberFields) {
-            res.status(400).json({ error: "Los campos price y stock deben ser de tipo number y mayores o igual a 0." });
-            return;
-        }
-
-        if (!statusField) {
-            res.status(400).json({ error: "El campo status debe ser tipo boolean." });
-            return;
-        }
-
-        await productManager.addProduct(product);
-
-        res.status(201).json({ status: 'success', product });
     } catch (error) {
         console.error('Error al intentar agregar el producto:', error);
         res.status(500).json({ error: 'Error interno del servidor al intentar agregar el producto.' });
@@ -111,51 +80,7 @@ router.put('/:pid', async (req, res) => {
     const idProductToUpdate = req.params.pid;
 
     try {
-        const product = await productManager.getProductById(idProductToUpdate);
-        if (!product) {
-            res.status(400).json({ error: 'Producto no encontrado.' });
-            return;
-        }
-
-        if (updatedFields.title && typeof updatedFields.title !== 'string') {
-            res.status(400).json({ error: "El campo title debe ser un string." });
-            return;
-        }
-        if (updatedFields.description && typeof updatedFields.description !== 'string') {
-            res.status(400).json({ error: "El campo description debe ser un string." });
-            return;
-        }
-        if (updatedFields.code && typeof updatedFields.code !== 'string') {
-            res.status(400).json({ error: "El campo code debe ser un string." });
-            return;
-        }
-        if (updatedFields.category && typeof updatedFields.category !== 'string') {
-            res.status(400).json({ error: "El campo category debe ser un string." });
-            return;
-        }
-        if (updatedFields.price && typeof updatedFields.price !== 'number') {
-            res.status(400).json({ error: "El campo price debe ser un number." });
-            return;
-        }
-        if (updatedFields.stock && typeof updatedFields.stock !== 'number') {
-            res.status(400).json({ error: "El campo stock debe ser un number." });
-            return;
-        }
-        if (updatedFields.status && typeof updatedFields.status !== 'boolean') {
-            res.status(400).json({ error: "El campo status debe ser un boolean." });
-            return;
-        }
-
-        const products = await productManager.getProducts();
-        const isInProducts = products.some(prod => prod.code === updatedFields.code);
-
-        if (isInProducts) {
-            res.status(400).json({ error: `El código de producto ${product.code} ya se encuentra en products` });
-            return;
-        }
-
         await productManager.updateProduct(idProductToUpdate, updatedFields);
-
 
         res.status(201).json({ status: 'success', updatedFields });
     } catch (error) {
