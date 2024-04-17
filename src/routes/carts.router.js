@@ -9,7 +9,7 @@ router.post('/', (req, res) =>{
 
     cartManager.addCart()
 
-    res.status(201).json({status: 'success', message:'Se ha creado el listado de carritos'})
+    res.status(201).json({status: 'success', message:'Se ha creado un nuevo carrito'})
 })
 
 // Ruta para obtener los carritos

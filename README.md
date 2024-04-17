@@ -29,6 +29,10 @@ npm install socket.io
 
 El servidor estará corriendo en las siguientes URLs:
 
+### URLs /api/products
+
+URLs api/products para metodos GET:
+
 URLs api/products para obtener el json del pagination de los productos:
 - [http://localhost:8080/api/products](http://localhost:8080/api/products)
 
@@ -60,38 +64,95 @@ URLs api/products para utilizar los metodos post, put y delete(desde postman):
 - Metodo DELETE para eliminar un producto(pasando el id del producto a eliminar como parametro): - [http://localhost:8080/api/products/661f0bd447d15e916fb80437]
 
 
+### URLs /api/carts
+
+#### URLs api/carts para metodos GET:
+
+URLs api/carts para obtener el json de los carritos:
+- [http://localhost:8080/api/carts](http://localhost:8080/api/carts)
+
+URLs api/carts/:cid para obtener el json del carrito por id:
+- [http://localhost:8080/api/carts/661d5cb4983b6ec699ef4856](http://localhost:8080/api/carts/661d5cb4983b6ec699ef4856)
+
+
+#### URLs api/carts para utilizar los metodos post, put y delete(desde postman):
+
+METODOS POST:
+- Ruta para crear un nuevo carrito utilizando el metodo POST, con postman:
+ [http://localhost:8080/api/carts](http://localhost:8080/api/carts)
+
+- Ruta para agregar el producto al arreglo products del carrito seleccionado por id, utilizando el metodo POST por postman:
+ [http://localhost:8080/api/carts/660b577741af3e1a719e364c/product/6606ce83e69eb87a91d699dd](http://localhost:8080/api/carts/660b577741af3e1a719e364c/product/6606ce83e69eb87a91d699dd)
+
+METODOS PUT:
+- Ruta para actualizar los productos de un carrito, pasando el id del cart como parametro y el array con objetos que contengan array de products, quantity, y _id, por body, utilizando el metodo PUT por postman:
+ [http://localhost:8080/api/carts/660b577741af3e1a719e364c/product/6606ce83e69eb87a91d699dd](http://localhost:8080/api/carts/660b577741af3e1a719e364c/product/6606ce83e69eb87a91d699dd)
+
+- Ruta para actualizar la cantidad de productos del prod id corerspondiente al cart id pasados por parametros con la quantity pasado por body en un json { "quantity" : x }, utilizando el metodo PUT por postman:
+ [http://localhost:8080/api/carts/661d5cb4983b6ec699ef4856/products/6606ce83e69eb87a91d699da](http://localhost:8080/api/carts/661d5cb4983b6ec699ef4856/products/6606ce83e69eb87a91d699da)
+
+METODOS DELETE:
+- Ruta para eliminar un producto por id correspondiente al carrito seleccionado por id, utilizando el metodo DELETE por postman:
+ [http://localhost:8080/api/carts/661d5cb4983b6ec699ef4856/products/6606ce83e69eb87a91d699e3](http://localhost:8080/api/carts/661d5cb4983b6ec699ef4856/products/6606ce83e69eb87a91d699e3)
+
+- Ruta para eliminar todos los productos del carrito seleccionado por id, utilizando el metodo DELETE por postman:
+ [http://localhost:8080/api/carts/660b577741af3e1a719e364c](http://localhost:8080/api/carts/660b577741af3e1a719e364c)
+
+
+
+### URLs para las vistas /
+
 URLs para obtener los HTML con las tarjetas de productos:
 
-- [http://localhost:8080/home](http://localhost:8080/home)
-- [http://localhost:8080/product/6606ce83e69eb87a91d699df](http://localhost:8080/product/6606ce83e69eb87a91d699df)
+
+URLs/products para obtener el json del pagination de los productos:
+- [http://localhost:8080/products](http://localhost:8080/products)
+
+URLs/products?limit=x para filtrar los productos por cantidad:
+- [http://localhost:8080/products?limit=5](http://localhost:8080/products?limit=5)
+
+URLs/products/id para filtrar por id de producto:
+- [http://localhost:8080/products/6606ce83e69eb87a91d699df](http://localhost:8080/products/6606ce83e69eb87a91d699df)
+
+URLs/products?category=categoría para filtrar por categoría:
+- [http://localhost:8080/products?category=mates](http://localhost:8080/products?category=mates)
+
+URLs/products=availability=s/n para filtrar por disponibilidad de stock:
+- [http://localhost:8080/products?availability=s](http://localhost:8080/products?availability=s)
+- [http://localhost:8080/products?availability=n](http://localhost:8080/products?availability=n)
+
+URLs/products?sort=asc/desc para ordenar por precio:
+- [http://localhost:8080/products?sort=asc](http://localhost:8080/products?sort=asc)
+- [http://localhost:8080/products?sort=desc](http://localhost:8080/products?sort=desc)
+
+URLs/products?page=x para buscar por página:
+- [http://localhost:8080/products?page=2](http://localhost:8080/products?page=2)
+
+ Ruta para obtener el renderizado de un producto especifico por id pasado por parametro
+- [http://localhost:8080/product/6606ce83e69eb87a91d699da](http://localhost:8080/product/6606ce83e69eb87a91d699da)
+
+
+Renderizado de Cart por id
+ Ruta con los productos de un carrito seleccionado por id pasado por parametro:
+- [http://localhost:8080/carts/661d5cb4983b6ec699ef4856](http://localhost:8080/carts/661d5cb4983b6ec699ef4856)
+
+
+
+-----
+-----
+
+
 
 URL con listado para visualizar y/o eliminar productos y formulario para agregar un nuevo producto (también puede ser utilizada con postman):
 
 - [http://localhost:8080/realTimeProducts](http://localhost:8080/realTimeProducts)
 
 
-URLs api/carts para el manejo de los carritos:
-- Ruta para obtener los productos del carrito por id:
- [http://localhost:8080/api/carts/660b577541af3e1a719e364a](http://localhost:8080/api/carts/660b577541af3e1a719e364a)
-- Ruta para crear un nuevo carrito utilizando el metodo POST, con postman:
- [http://localhost:8080/api/carts](http://localhost:8080/api/carts)
-- Ruta para agregar el producto al arreglo products del carrito seleccionado por id, utilizando el metodo POST por postman:
- [http://localhost:8080/api/carts/660b577541af3e1a719e364a/product/66081255e1ba81083e0a405a](http://localhost:8080/api/carts/660b577541af3e1a719e364a/product/66081255e1ba81083e0a405a)
 
-
-URL para acceder a la App de chat:
+### URL para acceder a la App de chat:
 - [http://localhost:8080/chat](http://localhost:8080/chat)
 
 
-
-
-### Ejemplos de Funcionalidad
-
-- **Obtener todos los productos**: Se llamará desde el navegador a la URL [http://localhost:8080/api/products](http://localhost:8080/api/products) sin incluir ninguna query. Esto devolverá todos los productos.
-
-- **Obtener un número específico de productos**: Se llamará desde el navegador a la URL [http://localhost:8080/api/products?limit=5](http://localhost:8080/api/products?limit=5). Esto devolverá solo los primeros 5 productos.
-
-- **Obtener un producto por su ID**: Se llamará desde el navegador a la URL [http://localhost:8080/api/products/3](http://localhost:8080/api/products/2). Esto devolverá solo el producto con ID igual a 2.
 
 
 ## Dependencias

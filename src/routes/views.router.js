@@ -14,23 +14,23 @@ router.get('/', (_, res) => {
 })
 
 // Ruta para obtener todos los productos o limitar la cantidad y renderizarlo
-router.get('/home', async (req, res) => {
-    const productManager = req.app.get('productManager')
-    try {
-        const products = await productManager.getProducts();
+// router.get('/home', async (req, res) => {
+//     const productManager = req.app.get('productManager')
+//     try {
+//         const products = await productManager.getProducts();
         
-        res.render('home', { // Renderizamos la vista 'productList'
-            title: 'Lista de Productos',
-            products: products,
-            styles: [
-                'product.css'
-            ],
-        });
-    } catch (error) {
-        console.error("Error al obtener productos:", error);
-        res.status(500).send("Error interno del servidor");
-    }
-});
+//         res.render('home', { // Renderizamos la vista 'productList'
+//             title: 'Lista de Productos',
+//             products: products,
+//             styles: [
+//                 'product.css'
+//             ],
+//         });
+//     } catch (error) {
+//         console.error("Error al obtener productos:", error);
+//         res.status(500).send("Error interno del servidor");
+//     }
+// });
 
 // Ruta para obtener un producto por Id y renderizarlo
 router.get('/product/:pid', async (req, res) => {
