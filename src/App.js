@@ -8,6 +8,7 @@ const handlebars = require('express-handlebars').create({
 });
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/carts.router');
@@ -16,22 +17,46 @@ const realTimeProductsRouter = require('./routes/realTimeProducts.router');
 const managerDBProductsViewRouter = require('./routes/managerDBProductsView.router');
 const chatRouter = require('./routes/chat.router');
 
-const app = express();
-
 const methodOverride = require('method-override');
 const ProductManager = require('./dao/dbManager/ProductManager');
 const CartManager = require('./dao/dbManager/CartManager');
+
+const app = express();
 
 // Configuración de Handlebars con opciones para controlar el acceso al prototipo
 app.engine('handlebars', handlebars.engine);
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
 
+// Middleware y configuraciones
 app.use(express.static(`${__dirname}/../public`));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+// Configuración de express-session
+app.use(session({
+    secret: 'asdf12423bre',
+    resave: true,
+    saveUninitialized: true
+}));
+
+// Rutas y middleware de sesión
+app.use('/session', require('./routes/session.router.js'));
+
+const authMiddleware = (req, res, next) => {
+    // Middleware para verificar sesión de administrador
+    if (!req.session.admin) {
+        return res.status(401).send('Unauthorized!')
+    }
+    next()
+}
+
+app.get('/admin', authMiddleware, (req, res) => {
+    res.send('Admin page')
+})
+
+// Rutas principales
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
@@ -39,6 +64,7 @@ app.use('/realTimeProducts', realTimeProductsRouter);
 app.use('/managerDBProductsView', managerDBProductsViewRouter);
 app.use('/chat', chatRouter);
 
+// Inicialización de la base de datos y del servidor
 const main = async () => {
     await mongoose.connect('mongodb://localhost:27017', {
         dbName: 'ecommerce'

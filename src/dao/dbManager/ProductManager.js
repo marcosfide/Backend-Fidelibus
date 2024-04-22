@@ -11,7 +11,7 @@ class ProductManager {
             limit = limit ? limit : 10;
             page = page ? page : 1;
             const query = {};
-    
+                
             // Agregar filtro por categoría si está presente
             if (category) {
                 query.category = category;
@@ -32,6 +32,12 @@ class ProductManager {
             };
     
             const products = await ProductModel.paginate(query, options);
+
+            // Validar si page no está definido o es menor que 1
+            if (isNaN(page) || page < 1 || page > products.totalPages) {
+                throw new Error('¡Página no válida!');
+            }
+
             return products;
         } catch (err) {
             throw err;

@@ -129,7 +129,7 @@ URLs/products?page=x para buscar por página:
 - [http://localhost:8080/products?page=2](http://localhost:8080/products?page=2)
 
  Ruta para obtener el renderizado de un producto especifico por id pasado por parametro
-- [http://localhost:8080/product/6606ce83e69eb87a91d699da](http://localhost:8080/product/6606ce83e69eb87a91d699da)
+- [http://localhost:8080/products/6606ce83e69eb87a91d699da](http://localhost:8080/products/6606ce83e69eb87a91d699da)
 
 
 Renderizado de Cart por id
@@ -160,6 +160,7 @@ A continuación se detallan las dependencias utilizadas en este proyecto:
 
 - **Express**: Framework web rápido y minimalista para Node.js.
 - **Express Handlebars**: Módulo de Handlebars para Express que proporciona renderizado de plantillas HTML.
+- **Express Session**: Middleware de Express que proporciona soporte para sesiones de usuario en la aplicación.
 - **Method-Override**: Middleware de Express que permite usar métodos HTTP como PUT o DELETE en formularios HTML.
 - **Mongoose**: Herramienta de modelado de objetos MongoDB para Node.js.
 - **Socket.io**: Biblioteca que habilita comunicación en tiempo real entre clientes y servidores web.

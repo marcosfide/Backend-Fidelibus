@@ -33,28 +33,32 @@ router.get('/', (_, res) => {
 // });
 
 // Ruta para obtener un producto por Id y renderizarlo
-router.get('/product/:pid', async (req, res) => {
-    const productManager = req.app.get('productManager')
-    const productId = req.params.pid;
-
-    const product = await productManager.getProductById(productId);
-    if (!product) {
-        res.status(400).json({ error: 'Producto no encontrado.' })
-        return;
+router.get('/products/:pid', async (req, res) => {
+    try{
+        const productManager = req.app.get('productManager')
+        const productId = req.params.pid;
+    
+        const product = await productManager.getProductById(productId);
+        if (!product) {
+            res.status(400).json({ error: 'Producto no encontrado.' })
+            return;
+        }
+    
+        const productData = Object.assign({}, product.toJSON());
+        res.render('product', {
+            title: 'Producto por id',
+            product: productData,
+            styles: [
+                'product.css'
+            ],
+            scripts: [
+                'product.js'
+            ]
+        });
+    
+    } catch (error) {
+        res.status(500).send(`Error interno del servidor: ${error.message}`);
     }
-
-    const productData = Object.assign({}, product.toJSON());
-    res.render('product', {
-        title: 'Producto por id',
-        product: productData,
-        styles: [
-            'product.css'
-        ],
-        scripts: [
-            'product.js'
-        ]
-    });
-
 });
 
 // Ruta para obtener todos los productos o filtrados por parametros
@@ -82,8 +86,7 @@ router.get('/products', async (req, res) => {
         });
         return products
     } catch (error) {
-        console.error("Error al obtener productos:", error);
-        res.status(500).send("Error interno del servidor");
+        res.status(500).send(`Error interno del servidor: ${error.message}`);
     }
 });
 
@@ -111,8 +114,7 @@ router.get('/carts/:cid', async (req, res) => {
         return cart
 
     } catch (error) {
-        console.error("Error al obtener el cart:", error);
-        res.status(500).send("Error interno del servidor");
+        res.status(500).send(`Error interno del servidor: ${error.message}`);
     }
 });
 
