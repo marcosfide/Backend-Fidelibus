@@ -1,16 +1,21 @@
-
-<h1>{{ title }}</h1>
+<div>
+    <a href="/">Inicio</a>
+    <a href="/profile">My Profile</a>
+    <a href="/products">Products</a>
+    <a href="/api/session/logout">Logout</a>
+</div>
+<h1>Bienvenido {{firstName}} {{lastName}}! {{email}}. Rol: {{rol}}</h1>
+<h2>{{ title }}</h2>
 <div class="card-product">
     <ul>
-        <script>console.log(products)</script>
         {{#each products}}
             <li>
-                <h1>Nombre: {{this.title}}</h1>
-                <h4>Descripción: {{this.description}}</h4>
-                <h4>Precio: {{this.price}}</h4>
-                <h4>Stock: {{this.stock}}</h4>
-                <h4>Imagen: {{this.thumbnail}}</h4>
-                <h4>Codigo: {{this.code}}</h4>
+                <h3>Nombre: {{this.title}}</h3>
+                <h5>Descripción: {{this.description}}</h5>
+                <h5>Precio: {{this.price}}</h5>
+                <h5>Stock: {{this.stock}}</h5>
+                <h5>Imagen: {{this.thumbnail}}</h5>
+                <h5>Codigo: {{this.code}}</h5>
                 <button>Agregar al carrito</button>
             </li>
         {{/each}}

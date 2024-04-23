@@ -1,17 +1,82 @@
 const { Router } = require('express')
+const User = require('../dao/models/user.model')
+const {userIsLoggedIn, userIsNotLoggedId} = require('../middlewares/auth.middleware')
 
 const router = Router();
 
+// Rutas para home con login y register
+router.get('/', (req, res) => {
+    const isLoggedIn = ![null, undefined].includes(req.session.user)
 
-router.get('/', (_, res) => {
     res.render('index', {
-        title:'Websockets',
+        title: 'Home',
         useWS: true,
         scripts: [
             'index.js'
-        ]
+        ],
+        isLoggedIn,
+        isNotLoggedIn: !isLoggedIn
     })
-})
+});
+
+// Ruta para login
+router.get('/login', userIsNotLoggedId, (_, res) => {
+    res.render('login', {
+        title: 'Login',
+    })
+});
+
+// Ruta para register
+router.get('/register', userIsNotLoggedId, (_, res) => {
+    res.render('register', {
+        title: 'Register',
+    })
+});
+
+// Ruta para profile
+router.get('/profile', userIsLoggedIn, async (req, res) => {
+    if (!req.session.user || !req.session.user._id) {
+        return res.status(401).send('Unauthorized');
+    }
+
+    const idFromSession = req.session.user._id;
+
+    try {
+        let user;
+        if (idFromSession === 'admin1234') {
+            user = {
+                firstName: 'Marcos',
+                lastName: 'Fidelibus',
+                age: 28,
+                email: 'adminCoder@coder.com',
+                rol: 'Admin'
+            };
+        } else {
+            user = await User.findOne({ _id: idFromSession });
+        }
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        res.render('profile', {
+            title: 'My profile',
+            user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                age: user.age,
+                email: user.email,
+                rol: user.rol == 'Admin' ? 'Admin' : 'User'
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+
 
 // Ruta para obtener todos los productos o limitar la cantidad y renderizarlo
 // router.get('/home', async (req, res) => {
@@ -33,10 +98,16 @@ router.get('/', (_, res) => {
 // });
 
 // Ruta para obtener un producto por Id y renderizarlo
-router.get('/products/:pid', async (req, res) => {
+router.get('/products/:pid', userIsLoggedIn, async (req, res) => {
     try{
         const productManager = req.app.get('productManager')
         const productId = req.params.pid;
+        const idFromSession = req.session.user._id;
+        const user = await User.findOne({_id: idFromSession});
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
     
         const product = await productManager.getProductById(productId);
         if (!product) {
@@ -53,7 +124,10 @@ router.get('/products/:pid', async (req, res) => {
             ],
             scripts: [
                 'product.js'
-            ]
+            ],
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email
         });
     
     } catch (error) {
@@ -62,19 +136,36 @@ router.get('/products/:pid', async (req, res) => {
 });
 
 // Ruta para obtener todos los productos o filtrados por parametros
-router.get('/products', async (req, res) => {
+router.get('/products', userIsLoggedIn, async (req, res) => {
     try {
         const productManager = req.app.get('productManager');
         const products = await productManager.getProducts(req.query);
-        console.log(products.docs);
         const baseUrl = req.baseUrl;
         const queryParams = req.query;
+        const idFromSession = req.session.user._id;
+        let user;
+        if (idFromSession === 'admin1234') {
+            user = {
+                firstName: 'Marcos',
+                lastName: 'Fidelibus',
+                age: 28,
+                email: 'adminCoder@coder.com',
+                rol: 'Admin'
+            };
+        } else {
+            user = await User.findOne({ _id: idFromSession });
+        }
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
 
         // Obtener los enlaces previo y siguiente
         const prevLink = await productManager.buildPrevLink(baseUrl, queryParams, products.page);
         const nextLink = await productManager.buildNextLink(baseUrl, queryParams, products.page, products.totalPages);
 
         res.render('products', {
+            title: 'Productos',
             products: products.docs,
             prevLink: prevLink ? `http://localhost:8080/products${prevLink}` : null,
             nextLink: nextLink ? `http://localhost:8080/products${nextLink}` : null,
@@ -83,6 +174,10 @@ router.get('/products', async (req, res) => {
             styles: [
                 'product.css'
             ],
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            rol: user.rol == 'Admin' ? 'Admin' : 'User'
         });
         return products
     } catch (error) {
@@ -91,7 +186,7 @@ router.get('/products', async (req, res) => {
 });
 
 // Ruta para obtener cart por id
-router.get('/carts/:cid', async (req, res) => {
+router.get('/carts/:cid', userIsLoggedIn, async (req, res) => {
     const cartManager = req.app.get('cartManager')
     const cartId = req.params.cid
 

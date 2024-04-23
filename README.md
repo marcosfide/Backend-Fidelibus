@@ -12,22 +12,16 @@ nodemon src/App.js
 ```
 Asegúrate también de tener MongoDB instalado en tu sistema. Puedes descargarlo desde el sitio web oficial de MongoDB e instalarlo siguiendo las instrucciones proporcionadas.
 
-Si no tienes Express instalado a nivel global o si no está incluido en las dependencias del proyecto, puedes instalarlo utilizando npm:
-
-```bash
-npm install express
-```
-
-Además, si no tienes Socket.IO instalado a nivel global o si no está incluido en las dependencias del proyecto, puedes instalarlo utilizando npm:
-
-
-```bash
-npm install socket.io
-```
 
 ## URLs de Funcionalidad
 
 El servidor estará corriendo en las siguientes URLs:
+
+### URLs para las vistas utilizando session /
+
+URL al index del proyecto, por la cual podrás seguir interactivamente las distintas secciones estando logueado:
+- [http://localhost:8080](http://localhost:8080)
+
 
 ### URLs /api/products
 
@@ -105,7 +99,7 @@ METODOS DELETE:
 URLs para obtener los HTML con las tarjetas de productos:
 
 
-URLs/products para obtener el json del pagination de los productos:
+URLs/products para obtener los productos:
 - [http://localhost:8080/products](http://localhost:8080/products)
 
 URLs/products?limit=x para filtrar los productos por cantidad:

@@ -1,14 +1,20 @@
-
-<h1>{{ this.title }}</h1>
+<div>
+    <a href="/">Inicio</a>
+    <a href="/profile">My Profile</a>
+    <a href="/products">Products</a>
+    <a href="/api/session/logout">Logout</a>
+</div>
+<h1>Bienvenido {{firstName}} {{lastName}}! {{email}}</h1>
+<h2>{{ title }}</h2>
 <div class="card-product">
     <ul>
         <li>
-            <h1>Nombre: {{product.title}}</h1>
-            <h4>Descripción: {{product.description}}</h4>
-            <h4>Precio: {{product.price}}</h4>
-            <h4>Stock: {{product.stock}}</h4>
-            <h4>Imagen: {{product.thumbnail}}</h4>
-            <h4>Codigo: {{product.code}}</h4>
+            <h3>Nombre: {{product.title}}</h3>
+            <h5>Descripción: {{product.description}}</h5>
+            <h5>Precio: {{product.price}}</h5>
+            <h5>Stock: {{product.stock}}</h5>
+            <h5>Imagen: {{product.thumbnail}}</h5>
+            <h5>Codigo: {{product.code}}</h5>
         </li>
     </ul>
 </div>

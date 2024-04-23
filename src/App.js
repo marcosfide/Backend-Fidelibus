@@ -8,7 +8,7 @@ const handlebars = require('express-handlebars').create({
 });
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
-const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/carts.router');
@@ -20,6 +20,14 @@ const chatRouter = require('./routes/chat.router');
 const methodOverride = require('method-override');
 const ProductManager = require('./dao/dbManager/ProductManager');
 const CartManager = require('./dao/dbManager/CartManager');
+
+
+const {dbName, mongoUrl} = require('./dbConfig.js');
+// const sessionMiddleware = require('./session/memoryStorage');
+// const sessionMiddleware = require('./session/fileStorage');
+const sessionMiddleware = require('./session/mongoStorage');
+
+
 
 const app = express();
 
@@ -34,15 +42,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
-// Configuración de express-session
-app.use(session({
-    secret: 'asdf12423bre',
-    resave: true,
-    saveUninitialized: true
-}));
+app.use(cookieParser())
+app.use(sessionMiddleware)
 
 // Rutas y middleware de sesión
-app.use('/session', require('./routes/session.router.js'));
+app.use('/api/session', require('./routes/session.router'));
 
 const authMiddleware = (req, res, next) => {
     // Middleware para verificar sesión de administrador
@@ -66,9 +70,7 @@ app.use('/chat', chatRouter);
 
 // Inicialización de la base de datos y del servidor
 const main = async () => {
-    await mongoose.connect('mongodb://localhost:27017', {
-        dbName: 'ecommerce'
-    });
+    await mongoose.connect(mongoUrl, {dbName});
 
     const productManager = new ProductManager();
     const cartManager = new CartManager();
