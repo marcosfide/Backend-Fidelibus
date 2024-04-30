@@ -26,6 +26,13 @@ router.get('/login', userIsNotLoggedId, (_, res) => {
     })
 });
 
+// Ruta para login
+router.get('/resetPassword', userIsNotLoggedId, (_, res) => {
+    res.render('resetPassword', {
+        title: 'Reset password',
+    })
+});
+
 // Ruta para register
 router.get('/register', userIsNotLoggedId, (_, res) => {
     res.render('register', {
@@ -39,24 +46,26 @@ router.get('/profile', userIsLoggedIn, async (req, res) => {
         return res.status(401).send('Unauthorized');
     }
 
-    const idFromSession = req.session.user._id;
-
     try {
         let user;
-        if (idFromSession === 'admin1234') {
+
+        // Verificar si el usuario autenticado es administrativo
+        if (req.session.user.email === 'adminCoder@coder.com') {
+            // Utilizar el objeto de usuario administrativo creado dinámicamente
             user = {
-                firstName: 'Marcos',
-                lastName: 'Fidelibus',
+                firstName: 'Administrador',
+                lastName: 'Primero',
                 age: 28,
                 email: 'adminCoder@coder.com',
                 rol: 'Admin'
             };
         } else {
+            // Buscar el usuario en la base de datos
+            const idFromSession = req.session.user._id;
             user = await User.findOne({ _id: idFromSession });
-        }
-
-        if (!user) {
-            return res.status(404).send('User not found');
+            if (!user) {
+                return res.status(404).send('User not found');
+            }
         }
 
         res.render('profile', {
@@ -66,7 +75,7 @@ router.get('/profile', userIsLoggedIn, async (req, res) => {
                 lastName: user.lastName,
                 age: user.age,
                 email: user.email,
-                rol: user.rol == 'Admin' ? 'Admin' : 'User'
+                rol: user.rol
             }
         });
     } catch (error) {
@@ -142,22 +151,25 @@ router.get('/products', userIsLoggedIn, async (req, res) => {
         const products = await productManager.getProducts(req.query);
         const baseUrl = req.baseUrl;
         const queryParams = req.query;
-        const idFromSession = req.session.user._id;
         let user;
-        if (idFromSession === 'admin1234') {
+
+        // Verificar si el usuario autenticado es administrativo
+        if (req.session.user.email === 'adminCoder@coder.com') {
+            // Utilizar el objeto de usuario administrativo creado dinámicamente
             user = {
-                firstName: 'Marcos',
-                lastName: 'Fidelibus',
+                firstName: 'Administrador',
+                lastName: 'Primero',
                 age: 28,
                 email: 'adminCoder@coder.com',
                 rol: 'Admin'
             };
         } else {
+            // Buscar el usuario en la base de datos
+            const idFromSession = req.session.user._id;
             user = await User.findOne({ _id: idFromSession });
-        }
-
-        if (!user) {
-            return res.status(404).send('User not found');
+            if (!user) {
+                return res.status(404).send('User not found');
+            }
         }
 
         // Obtener los enlaces previo y siguiente
@@ -177,13 +189,14 @@ router.get('/products', userIsLoggedIn, async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            rol: user.rol == 'Admin' ? 'Admin' : 'User'
+            rol: user.rol
         });
         return products
     } catch (error) {
         res.status(500).send(`Error interno del servidor: ${error.message}`);
     }
 });
+
 
 // Ruta para obtener cart por id
 router.get('/carts/:cid', userIsLoggedIn, async (req, res) => {

@@ -75,9 +75,13 @@ class ProductManager {
 
         // Validar los campos del producto
         const requiredFields = title && description && code && price && stock && category;
+        price = +price;
+        stock = +stock;
+        status = (status === 'true');
         const textFields = typeof title === 'string' && typeof description === 'string' && typeof code === 'string' && typeof category === 'string';
         const numberFields = typeof price === 'number' && price > 0 && typeof stock === 'number' && stock >= 0;
         const statusField = typeof status === 'boolean';
+        console.log(status, statusField);
 
         if (!requiredFields || !textFields || !numberFields || !statusField) {
             return { error: "Los campos del producto no son válidos" };

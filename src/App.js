@@ -7,8 +7,14 @@ const handlebars = require('express-handlebars').create({
     }
 });
 const { Server } = require('socket.io');
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const passport = require('passport');
+
+
+const initializeStrategy = require('./config/passport-local.config.js');
+const initializeGithubStrategy = require('./config/passport-github.config.js');
 
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/carts.router');
@@ -17,7 +23,6 @@ const realTimeProductsRouter = require('./routes/realTimeProducts.router');
 const managerDBProductsViewRouter = require('./routes/managerDBProductsView.router');
 const chatRouter = require('./routes/chat.router');
 
-const methodOverride = require('method-override');
 const ProductManager = require('./dao/dbManager/ProductManager');
 const CartManager = require('./dao/dbManager/CartManager');
 
@@ -44,6 +49,11 @@ app.use(methodOverride('_method'));
 
 app.use(cookieParser())
 app.use(sessionMiddleware)
+
+initializeStrategy()
+initializeGithubStrategy()
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Rutas y middleware de sesión
 app.use('/api/session', require('./routes/session.router'));

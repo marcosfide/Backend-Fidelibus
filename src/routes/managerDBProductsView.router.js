@@ -1,22 +1,56 @@
 const { Router } = require('express')
+const User = require('../dao/models/user.model')
+const {userIsAdmin} = require('../middlewares/auth.middleware')
 
 const router = Router();
 
 
 // Ruta para acceder al form de datos del producto a agregar
-router.get('/', async (req, res) => {
-    const productManager = req.app.get('productManager')
-    try {       
-        const products = await productManager.getProducts();
-        
+router.get('/', userIsAdmin, async (req, res) => {
+    try {
+        const productManager = req.app.get('productManager');
+        const products = await productManager.getProducts(req.query);
+        const baseUrl = req.baseUrl;
+        const queryParams = req.query;
+        let user;
+
+        // Verificar si el usuario autenticado es administrativo
+        if (req.session.user.email === 'adminCoder@coder.com') {
+            // Utilizar el objeto de usuario administrativo creado dinámicamente
+            user = {
+                firstName: 'Administrador',
+                lastName: 'Primero',
+                age: 28,
+                email: 'adminCoder@coder.com',
+                rol: 'Admin'
+            };
+        } else {
+            // Buscar el usuario en la base de datos
+            const idFromSession = req.session.user._id;
+            user = await User.findOne({ _id: idFromSession });
+            if (!user) {
+                return res.status(404).send('User not found');
+            }
+        }
+
+        // Obtener los enlaces previo y siguiente
+        const prevLink = await productManager.buildPrevLink(baseUrl, queryParams, products.page);
+        const nextLink = await productManager.buildNextLink(baseUrl, queryParams, products.page, products.totalPages);
+
         res.render('managerDBProductsView', { // Renderizamos el listado y form
-            products: products,
+            products: products.docs,
             title: 'Agregar producto',
+            products: products.docs,
+            prevLink: prevLink ? `http://localhost:8080${prevLink}` : null,
+            nextLink: nextLink ? `http://localhost:8080${nextLink}` : null,
+            page: products.page,
+            totalPages: products.totalPages,
             styles: [
                 'product.css'
             ],
-            title:'Product Manager'
+            title: 'Product Manager'
         });
+        return products
     } catch (error) {
         console.error("Error al obtener productos:", error);
         res.status(500).send("Error interno del servidor");
@@ -25,55 +59,23 @@ router.get('/', async (req, res) => {
 
 // Ruta para agregar un producto
 router.post('/', async(req, res) => {
-    const productManager = req.app.get('productManager')
-    const product = req.body
-    
-    product.price = parseInt(product.price)
-    product.stock = parseInt(product.stock)
-    product.status ?  product.status = true : product.status = false;
+    const productManager = req.app.get('productManager');
+    const product = req.body;
 
+    try {
+        const result = await productManager.addProduct(product);
 
-    const requiredFields = product.title && product.description && product.code && product.price && product.stock && product.category;
-    const textFields = typeof product.title === 'string' && typeof product.description === 'string' && typeof product.code === 'string' && typeof product.category === 'string';
-    const numberFields = typeof product.price === 'number' && product.price > 0 && typeof product.stock === 'number' && product.stock >= 0;
-    const statusField = typeof product.status === 'boolean';
-
-    const productsFile = await productManager.getProducts()
-    const isInProducts = productsFile.some(prod => prod.code === product.code);
-    
-    if (isInProducts) {
-        res.status(400).json({ error: `El código de producto ${product.code} ya se encuentra en products` })
-        return;
+        if (result.error) {
+            res.status(400).json({ error: result.error });
+        } else {
+            res.status(201).json({ status: 'success', product });
+        }
+    } catch (error) {
+        console.error('Error al intentar agregar el producto:', error);
+        res.status(500).json({ error: 'Error interno del servidor al intentar agregar el producto.' });
     }
-
-    if(!requiredFields){
-        res.status(400).json({ error: "Todos los campos deben tener valores." })
-        return;
-    }
-
-    if(!textFields){
-        res.status(400).json({ error: "Los campos title, description, code y category deben ser string." })
-        return;
-    }
-
-    if(!numberFields){
-        res.status(400).json({ error: "Los campos price y stock deben ser de tipo number y mayores o igual a 0." })
-        return;
-    }
-
-    if(!statusField){
-        res.status(400).json({ error: "El campo status debe ser tipo boolean." })
-        return;
-    }
-
-    // 1ro Agregar el producto con el productManager
-    await productManager.addProduct(product)
-
-
-    res.status(201).json({status: 'success', product})
 
 })
-
 
 // Ruta para eliminar un producto
 router.delete('/:pid', async(req, res) =>{

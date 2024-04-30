@@ -158,6 +158,9 @@ A continuación se detallan las dependencias utilizadas en este proyecto:
 - **Method-Override**: Middleware de Express que permite usar métodos HTTP como PUT o DELETE en formularios HTML.
 - **Mongoose**: Herramienta de modelado de objetos MongoDB para Node.js.
 - **Socket.io**: Biblioteca que habilita comunicación en tiempo real entre clientes y servidores web.
+- **Mongoose-paginate-v2**
+- **Session-file-store**
+- **Cookie-parser**
 
 ## Autor
 **Marcos Fidelibus**
