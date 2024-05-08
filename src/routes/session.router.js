@@ -6,7 +6,6 @@ const passport = require('passport');
 const router = Router();
 
 router.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/faillogin'}), async (req, res) => {
-    console.log(req.body);
 
     // crear nueva session
     req.session.user = { email: req.user.email, _id: req.user._id };
