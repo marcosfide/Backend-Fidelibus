@@ -119,13 +119,13 @@
   },
   {
     "id": 12,
-    "title": "FormProd",
-    "description": "prodformws",
-    "code": "ppf333",
-    "price": 160,
-    "status": false,
+    "title": "Prod por form",
+    "description": "Prod por form",
+    "code": "ppfff",
+    "price": 33,
+    "status": true,
     "stock": 20,
-    "category": "producc",
-    "thumbnail": "/public/img.jpg"
+    "category": "formprod",
+    "thumbnail": "img/img"
   }
 ]

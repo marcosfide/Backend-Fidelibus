@@ -4,17 +4,6 @@ Este proyecto forma parte del curso de Backend de Coderhouse. Está desarrollado
 
 ## Ejecución
 
-Agregar archivo 
-github.private.js
-```bash
-module.exports = {
-    appId: '887419',
-    clientID: 'Iv1.ffac7dfe7cf142b3',
-    clientSecret: '3971e7aa09efe0f232b4da482b01ac32ef7bd6fb',
-    callbackURL: 'http://localhost:8080/api/session/githubcallback'
-}
-```
-
 Para ejecutar el proyecto, asegúrate de tener Node.js instalado en tu sistema. Luego, puedes utilizar npm para instalar las dependencias y nodemon para ejecutar el servidor.
 
 ```bash
@@ -32,6 +21,10 @@ El servidor estará corriendo en las siguientes URLs:
 
 URL al index del proyecto, por la cual podrás seguir interactivamente las distintas secciones estando logueado:
 - [http://localhost:8080](http://localhost:8080)
+
+### URL para obtener los datos del usuario actualmente logueado
+
+- [http://localhost:8080/api/session/current](http://localhost:8080/api/session/current)
 
 
 ### URLs /api/products

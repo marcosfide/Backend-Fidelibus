@@ -1,6 +1,7 @@
 const passport = require('passport');
 const {Strategy} = require('passport-local');
 const User = require('../dao/models/user.model');
+const Cart = require('../dao/models/cart.model');
 const hashingUtils = require('../utils/hashing');
 const { ObjectId } = require('mongodb');
 
@@ -21,13 +22,15 @@ const initializeStrategy = () => {
                 return done(null, false)
             }
 
+            const newCart = await Cart.create({products:[]})
             const newUser = {
                 firstName,
                 lastName,
                 age: +age,
                 email,
                 rol: 'User',
-                password: hashingUtils.hashPassword(password)
+                password: hashingUtils.hashPassword(password),
+                cart: newCart._id
             }
             const result = await User.create(newUser)
             //usuario nuevo creado correctamente
