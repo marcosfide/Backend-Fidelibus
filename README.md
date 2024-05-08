@@ -2,14 +2,25 @@
 
 Este proyecto forma parte del curso de Backend de Coderhouse. Está desarrollado utilizando Node.js y Express.
 
-## Ejecución
+## Ejecución del proyecto de manera local
+
+```bash
+git clone https://github.com/marcosfide/Backend-Fidelibus.git
+```
+
+```bash
+cd Backend-Fidelibus/
+```
 
 Para ejecutar el proyecto, asegúrate de tener Node.js instalado en tu sistema. Luego, puedes utilizar npm para instalar las dependencias y nodemon para ejecutar el servidor.
 
 ```bash
 npm install
+```
+```bash
 nodemon src/App.js
 ```
+
 Asegúrate también de tener MongoDB instalado en tu sistema. Puedes descargarlo desde el sitio web oficial de MongoDB e instalarlo siguiendo las instrucciones proporcionadas.
 
 
