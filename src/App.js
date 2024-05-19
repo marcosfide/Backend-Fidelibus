@@ -16,12 +16,22 @@ const passport = require('passport');
 const initializeStrategy = require('./config/passport-local.config.js');
 const initializeGithubStrategy = require('./config/passport-github.config.js');
 
-const productsRouter = require('./routes/products.router');
-const cartsRouter = require('./routes/carts.router');
-const viewsRouter = require('./routes/views.router');
-const realTimeProductsRouter = require('./routes/realTimeProducts.router');
-const managerDBProductsViewRouter = require('./routes/managerDBProductsView.router');
-const chatRouter = require('./routes/chat.router');
+const ProductsRouter = require('./routes/products.js');
+const CartsRouter = require('./routes/carts.js');
+const SessionRouter = require('./routes/session.js');
+const ChatRouter = require('./routes/chat.js');
+const RealTimeProductsRouter = require('./routes/realTimeProducts.js')
+const ManagerDBProductsViewRouter = require('./routes/managerDBProductsView.js')
+const ViewRouter = require('./routes/views.js')
+
+
+const productsRouter = new ProductsRouter()
+const cartsRouter = new CartsRouter()
+const sessionRouter = new SessionRouter()
+const chatRouter = new ChatRouter()
+const realTimeProductsRouter = new RealTimeProductsRouter()
+const managerDBProductsViewRouter = new ManagerDBProductsViewRouter()
+const viewsRouter = new ViewRouter()
 
 const ProductManager = require('./dao/dbManager/ProductManager');
 const CartManager = require('./dao/dbManager/CartManager');
@@ -55,9 +65,6 @@ initializeGithubStrategy()
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Rutas y middleware de sesión
-app.use('/api/session', require('./routes/session.router'));
-
 const authMiddleware = (req, res, next) => {
     // Middleware para verificar sesión de administrador
     if (!req.session.admin) {
@@ -71,12 +78,13 @@ app.get('/admin', authMiddleware, (req, res) => {
 })
 
 // Rutas principales
-app.use('/api/products', productsRouter);
-app.use('/api/carts', cartsRouter);
-app.use('/', viewsRouter);
-app.use('/realTimeProducts', realTimeProductsRouter);
-app.use('/managerDBProductsView', managerDBProductsViewRouter);
-app.use('/chat', chatRouter);
+app.use('/api/products', productsRouter.getRouter());
+app.use('/api/carts', cartsRouter.getRouter());
+app.use('/api/session', sessionRouter.getRouter());
+app.use('/', viewsRouter.getRouter());
+app.use('/realTimeProducts', realTimeProductsRouter.getRouter());
+app.use('/managerDBProductsView', managerDBProductsViewRouter.getRouter());
+app.use('/chat', chatRouter.getRouter());
 
 // Inicialización de la base de datos y del servidor
 const main = async () => {
