@@ -1,4 +1,8 @@
+const dotenv = require('dotenv')
+
+dotenv.config()
+
 module.exports = {
-    dbName: 'ecommerce',
-    mongoUrl: 'mongodb://localhost:27017'
+    dbName: process.env.DB_NAME,
+    mongoUrl: process.env.MONGO_URL
 }

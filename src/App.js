@@ -13,8 +13,8 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 
 
-const initializeStrategy = require('./config/passport-local.config.js');
-const initializeGithubStrategy = require('./config/passport-github.config.js');
+const initializeStrategy = require('./passport-config/passport-local.config.js');
+const initializeGithubStrategy = require('./passport-config/passport-github.config.js');
 
 const ProductsRouter = require('./routes/products.js');
 const CartsRouter = require('./routes/carts.js');
