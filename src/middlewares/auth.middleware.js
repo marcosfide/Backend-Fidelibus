@@ -1,3 +1,5 @@
+const { emailAdmin } = require ('../env-config/adminConfig');
+
 module.exports = {
 
     userIsLoggedIn: (req, res, next) => {
@@ -22,7 +24,7 @@ module.exports = {
             return res.status(401).send('User should be logged in')
         }
         console.log(req.session.user);
-        if(req.session.user.email !== 'adminCoder@coder.com'){
+        if(req.session.user.email !== emailAdmin){
             return res.status(401).send('Unautorized')
         }
         next()

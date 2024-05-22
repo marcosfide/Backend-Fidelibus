@@ -2,6 +2,7 @@ const Router = require('./router')
 const User = require('../dao/models/user.model');
 const { hashPassword } = require('../utils/hashing');
 const passport = require('passport');
+const { emailAdmin, passwordAdmin } = require ('../env-config/adminConfig');
 
 class SessionRouter extends Router {
     init() {
@@ -15,7 +16,7 @@ class SessionRouter extends Router {
         });
         
         this.get('/faillogin', (req,res) => {
-            res.send('Error logging in user!')
+            res.send('Incorrect user or password')
         })
         
         this.post('/resetPassword', async (req, res) =>{
@@ -64,13 +65,13 @@ class SessionRouter extends Router {
                 let user;
         
                 // Verificar si el usuario autenticado es administrativo
-                if (req.session.user.email === 'adminCoder@coder.com') {
+                if (req.session.user.email === emailAdmin) {
                     // Utilizar el objeto de usuario administrativo creado dinámicamente
                     user = {
                         firstName: 'Administrador',
                         lastName: 'Primero',
                         age: 28,
-                        email: 'adminCoder@coder.com',
+                        email: emailAdmin,
                         rol: 'Admin'
                     };
                 } else {

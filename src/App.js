@@ -35,12 +35,14 @@ const viewsRouter = new ViewRouter()
 
 const ProductManager = require('./dao/dbManager/ProductManager');
 const CartManager = require('./dao/dbManager/CartManager');
+const ProductsStorage = require('./persistence/productsStorage.js');
 
 
 const {dbName, mongoUrl} = require('./dbConfig.js');
 // const sessionMiddleware = require('./session/memoryStorage');
 // const sessionMiddleware = require('./session/fileStorage');
 const sessionMiddleware = require('./session/mongoStorage');
+const CartsStorage = require('./persistence/cartsStorage.js');
 
 
 
@@ -95,6 +97,8 @@ const main = async () => {
 
     app.set('productManager', productManager);
     app.set('cartManager', cartManager);
+    app.set('productsStorage', new ProductsStorage())
+    app.set('cartsStorage', new CartsStorage())
 
     const httpServer = app.listen(8080, () => {
         console.log('Servidor listo');

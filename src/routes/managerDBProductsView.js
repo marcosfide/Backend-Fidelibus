@@ -2,6 +2,7 @@ const Router = require('./router')
 
 const User = require('../dao/models/user.model')
 const {userIsAdmin} = require('../middlewares/auth.middleware')
+const { emailAdmin, passwordAdmin } = require ('../env-config/adminConfig');
 
 class ManagerDBProductsViewRouter extends Router {
     init() {
@@ -16,13 +17,13 @@ class ManagerDBProductsViewRouter extends Router {
                 let user;
 
                 // Verificar si el usuario autenticado es administrativo
-                if (req.session.user.email === 'adminCoder@coder.com') {
+                if (req.session.user.email === emailAdmin) {
                     // Utilizar el objeto de usuario administrativo creado dinámicamente
                     user = {
                         firstName: 'Administrador',
                         lastName: 'Primero',
                         age: 28,
-                        email: 'adminCoder@coder.com',
+                        email: emailAdmin,
                         rol: 'Admin'
                     };
                 } else {

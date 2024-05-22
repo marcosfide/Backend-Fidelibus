@@ -4,6 +4,7 @@ const User = require('../dao/models/user.model');
 const Cart = require('../dao/models/cart.model');
 const hashingUtils = require('../utils/hashing');
 const { ObjectId } = require('mongodb');
+const { emailAdmin, passwordAdmin } = require ('../env-config/adminConfig');
 
 
 const initializeStrategy = () => {
@@ -57,13 +58,13 @@ const initializeStrategy = () => {
             const newId = new ObjectId();
             // Convierte el nuevo ID en una cadena para usarlo en tu objeto de usuario
             const newIdString = newId.toHexString();
-            if (username === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+            if (username === emailAdmin && password === passwordAdmin) {
                 const user = {
                     firstName: 'Administrador',
                     lastName: 'Primero',
                     age: 28,
-                    email: 'adminCoder@coder.com',
-                    password: 'adminCod3r123',
+                    email: emailAdmin,
+                    password: passwordAdmin,
                     rol: 'Admin',
                     _id: newIdString
                 };

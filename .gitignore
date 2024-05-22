@@ -1,3 +1,8 @@
 
 /node_modules
 .env
+
+
+/src/routes/products-backup.js
+/src/routes/carts-backup.js
+/src/routes/views-backup.js
