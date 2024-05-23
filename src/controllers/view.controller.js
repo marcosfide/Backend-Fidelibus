@@ -1,12 +1,11 @@
 const User = require('../dao/models/user.model')
-const ProductModel = require('../dao/models/product.model')
-const CartModel = require('../dao/models/cart.model')
-const { emailAdmin, passwordAdmin } = require ('../env-config/adminConfig');
+const { emailAdmin } = require ('../env-config/adminConfig');
 
 class ViewController {
     
-    constructor(service){
-        this.service = service
+    constructor(productService, cartService){
+        this.productService = productService
+        this.cartService = cartService
     }
 
     async getHome(req, res){
@@ -94,7 +93,7 @@ class ViewController {
                 return res.status(404).send('User not found');
             }
             console.log(productId);
-            const product = await ProductModel.findById(productId);
+            const product = await this.productService.getById(productId);
             if (!product) {
                 return res.status(400).json({ error: 'Producto no encontrado.' });
             }
@@ -167,7 +166,7 @@ class ViewController {
                 lean: true
             };
     
-            const products = await ProductModel.paginate(query, options);
+            const products = await this.productService.paginate(query, options);
 
             // Validar si page no está definido o es menor que 1
             if (isNaN(page) || page < 1 || page > products.totalPages) {
@@ -225,7 +224,7 @@ class ViewController {
     async getCartById(req, res) {
         try {
             const cartId = req.params.cid
-            const cart = await CartModel.findOne({ _id: cartId }).populate('products.product')
+            const cart = await this.cartService.getById(cartId)
             
             if (!cart) {
                 res.status(400).json({ error: 'cart no encontrado.' });

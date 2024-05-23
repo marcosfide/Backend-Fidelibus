@@ -43,6 +43,7 @@ const {dbName, mongoUrl} = require('./dbConfig.js');
 // const sessionMiddleware = require('./session/fileStorage');
 const sessionMiddleware = require('./session/mongoStorage');
 const CartsStorage = require('./persistence/cartsStorage.js');
+const SesionsStorage = require('./persistence/sessionsStorage.js');
 
 
 
@@ -99,6 +100,7 @@ const main = async () => {
     app.set('cartManager', cartManager);
     app.set('productsStorage', new ProductsStorage())
     app.set('cartsStorage', new CartsStorage())
+    app.set('sessionsStorage', new SesionsStorage())
 
     const httpServer = app.listen(8080, () => {
         console.log('Servidor listo');
