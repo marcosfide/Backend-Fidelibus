@@ -1,3 +1,9 @@
+<div>
+    <a href="/">Inicio</a>
+    <a href="/profile">My Profile</a>
+    <a href="/products">Products</a>
+    <a href="/api/session/logout">Logout</a>
+</div>
 <h1>{{ title }}</h1>
 <div class="card-product">
     <ul>
@@ -9,9 +15,19 @@
                 <h3>Precio: ${{this.product.price}}</h3>
                 <h4>Descripción: {{this.product.description}}</h4>
                 <h4>Categoría: {{this.product.category}}</h4>
+
+                <form method="post" action="/api/carts/product/{{this._id}}?_method=DELETE" class="btn-eliminar">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Eliminar</button>
+                </form>
+                
             </li>
         {{/each}}
     </ul>
+    <h2>Precio total: ${{totalCart}}</h2>
+    <form method="post" action="/api/tickets">
+        <button type="submit">Terminar compra</button>
+    </form>
 </div>
 
 

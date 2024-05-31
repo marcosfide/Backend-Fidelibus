@@ -1,10 +1,10 @@
 const Router = require('./router')
 const ViewController = require ('../controllers/view.controller')
-
-const User = require('../dao/models/user.model')
-const {userIsLoggedIn, userIsNotLoggedId} = require('../middlewares/auth.middleware')
+const {userIsLoggedIn, userIsNotLoggedId, userIsAdmin} = require('../middlewares/auth.middleware')
 const { ProductsService } = require('../services/productsService')
 const { CartsService } = require('../services/cartsService')
+const { SessionsService }= require('../services/sessionsService')
+const { UsersService }= require('../services/usersService')
 
 class ViewRouter extends Router {
     init() {
@@ -17,7 +17,13 @@ class ViewRouter extends Router {
                 const cartService = new CartsService(
                     req.app.get('cartsStorage')
                 )
-                const controller = new ViewController(productService, cartService)
+                const sessionService = new SessionsService(
+                    req.app.get('sessionsStorage')
+                )
+                const userService = new UsersService(
+                    req.app.get('usersStorage')
+                )
+                const controller = new ViewController(productService, cartService, sessionService, userService)
                 return callback(controller, req, res)
             }
         }
@@ -44,7 +50,11 @@ class ViewRouter extends Router {
         this.get('/products', userIsLoggedIn, withController((controller, req, res) => controller.getRenderProducts(req, res)));
 
         // Ruta para obtener cart por id
-        this.get('/carts/:cid', userIsLoggedIn, withController((controller, req, res) => controller.getCartById(req, res)));
+        this.get('/cart', userIsLoggedIn, withController((controller, req, res) => controller.getCartById(req, res)));
+
+
+        // Ruta para acceder al form de datos del producto a agregar
+        this.get('/productsManager', userIsAdmin, withController((controller, req, res) => controller.getProductsManager(req, res)));
 
     }
 }

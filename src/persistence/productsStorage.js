@@ -5,7 +5,7 @@ class ProductsStorage {
     constructor(){}
 
     async getAll(){
-        return this.storage.getAll()
+        return ProductModel.find()
     }
 
     async paginate(query, options){

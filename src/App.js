@@ -18,20 +18,22 @@ const initializeGithubStrategy = require('./passport-config/passport-github.conf
 
 const ProductsRouter = require('./routes/products.js');
 const CartsRouter = require('./routes/carts.js');
+const UsersRouter = require('./routes/users.js');
 const SessionRouter = require('./routes/session.js');
 const ChatRouter = require('./routes/chat.js');
 const RealTimeProductsRouter = require('./routes/realTimeProducts.js')
-const ManagerDBProductsViewRouter = require('./routes/managerDBProductsView.js')
 const ViewRouter = require('./routes/views.js')
+const TicketRouter = require('./routes/tickets.js')
 
 
 const productsRouter = new ProductsRouter()
 const cartsRouter = new CartsRouter()
+const usersRouter = new UsersRouter()
 const sessionRouter = new SessionRouter()
 const chatRouter = new ChatRouter()
 const realTimeProductsRouter = new RealTimeProductsRouter()
-const managerDBProductsViewRouter = new ManagerDBProductsViewRouter()
 const viewsRouter = new ViewRouter()
+const ticketsRouter = new TicketRouter()
 
 const ProductManager = require('./dao/dbManager/ProductManager');
 const CartManager = require('./dao/dbManager/CartManager');
@@ -43,7 +45,9 @@ const {dbName, mongoUrl} = require('./dbConfig.js');
 // const sessionMiddleware = require('./session/fileStorage');
 const sessionMiddleware = require('./session/mongoStorage');
 const CartsStorage = require('./persistence/cartsStorage.js');
-const SesionsStorage = require('./persistence/sessionsStorage.js');
+const SessionsStorage = require('./persistence/sessionsStorage.js');
+const UsersStorage = require('./persistence/usersStorage.js');
+const TicketsStorage = require('./persistence/ticketsStorage.js');
 
 
 
@@ -68,25 +72,14 @@ initializeGithubStrategy()
 app.use(passport.initialize())
 app.use(passport.session())
 
-const authMiddleware = (req, res, next) => {
-    // Middleware para verificar sesión de administrador
-    if (!req.session.admin) {
-        return res.status(401).send('Unauthorized!')
-    }
-    next()
-}
-
-app.get('/admin', authMiddleware, (req, res) => {
-    res.send('Admin page')
-})
-
 // Rutas principales
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
+app.use('/api/tickets', ticketsRouter.getRouter());
+app.use('/api/users', usersRouter.getRouter());
 app.use('/api/session', sessionRouter.getRouter());
 app.use('/', viewsRouter.getRouter());
 app.use('/realTimeProducts', realTimeProductsRouter.getRouter());
-app.use('/managerDBProductsView', managerDBProductsViewRouter.getRouter());
 app.use('/chat', chatRouter.getRouter());
 
 // Inicialización de la base de datos y del servidor
@@ -100,7 +93,9 @@ const main = async () => {
     app.set('cartManager', cartManager);
     app.set('productsStorage', new ProductsStorage())
     app.set('cartsStorage', new CartsStorage())
-    app.set('sessionsStorage', new SesionsStorage())
+    app.set('sessionsStorage', new SessionsStorage())
+    app.set('usersStorage', new UsersStorage())
+    app.set('ticketsStorage', new TicketsStorage())
 
     const httpServer = app.listen(8080, () => {
         console.log('Servidor listo');

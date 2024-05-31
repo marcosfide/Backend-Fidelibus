@@ -24,6 +24,19 @@ class CartsService {
         return this.storage.getProductById(id);
     }
 
+    async getTotalCart(id) {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new Error('invalid params');
+        }
+        const cart = await this.storage.getById(id);
+
+        const totalCart = cart.products.reduce((total, cartItem) => {
+            return total + (cartItem.product.price * cartItem.quantity);
+        }, 0);
+
+        return totalCart;
+    }
+
     async deleteById(id){
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('invalid params');

@@ -1,12 +1,11 @@
 const UserModel = require('../dao/models/user.model');
 
-class SesionsStorage {
+class UsersStorage {
 
     constructor(){}
 
-    async createSession(req, userSession){
-        // crear nueva session
-        req.session.user = userSession;
+    async updatePassword(email, password){
+        await UserModel.updateOne({email}, password)
     }
 
     async getById(id){
@@ -17,6 +16,11 @@ class SesionsStorage {
         return user
     }
 
+    async getByEmail(email){
+        const user = await UserModel.findOne({ email });
+        return user
+    }
+
 }
 
-module.exports = SesionsStorage
+module.exports = UsersStorage

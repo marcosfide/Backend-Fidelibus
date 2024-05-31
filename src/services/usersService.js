@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
 
-class SessionsService {
+class UsersService {
 
     constructor(storage){
         this.storage = storage
-    }
-
-    async createSession(req, userSession){
-        this.storage.createSession(req, userSession)
     }
 
     async updatePassword(email, password){
@@ -20,6 +16,10 @@ class SessionsService {
         }
         return this.storage.getById(id);
     }
+
+    async getByEmail(email){
+        return this.storage.getByEmail(email);
+    }
 }
 
-module.exports = { SessionsService }
+module.exports = { UsersService }

@@ -9,5 +9,13 @@
     <a href="/profile">My Profile</a>
     <a href="/products">Products</a>
     <a href="/api/session/logout">Logout</a>
+    
+    {{#if isNotAdmin}}
+    <a href="/cart">Cart</a>
+    {{/if}}
+    
+    {{#if isAdmin}}
+    <a href="/productsManager">Product Manager</a>
+    {{/if}}
     {{/if}}
 </div>

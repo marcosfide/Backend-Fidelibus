@@ -1,7 +1,8 @@
 const Router = require('./router')
 const passport = require('passport');
 const SessionController = require('../controllers/session.controller');
-const { SessionsService }= require('../services/sessionsService')
+const { SessionsService }= require('../services/sessionsService');
+const { CartsService } = require('../services/cartsService');
 
 class SessionRouter extends Router {
     init() {
@@ -11,7 +12,10 @@ class SessionRouter extends Router {
                 const service = new SessionsService(
                     req.app.get('sessionsStorage')
                 )
-                const controller = new SessionController(service)
+                const cartsService = new CartsService(
+                    req.app.get('cartsStorage')
+                )
+                const controller = new SessionController(service, cartsService)
                 return callback(controller, req, res)
             }
         }
@@ -22,11 +26,7 @@ class SessionRouter extends Router {
             res.send('Incorrect user or password')
         })
         
-        this.post('/resetPassword', withController((controller, req, res) => controller.resetPassword(req, res)));
-        
         this.get('/logout', withController((controller, req, res) => controller.deleteSession(req, res)));
-        
-        this.post('/register', passport.authenticate('register', {failureRedirect: '/api/session/failregister'}), withController((controller, req, res) => controller.register(req, res)));
         
         this.get('/failregister', (req,res) => {
             res.send('User is already registered!')

@@ -1,16 +1,20 @@
 const Router = require('./router')
 const CartController = require ('../controllers/cart.cotroller')
 const { CartsService } = require('../services/cartsService')
+const { UsersService } = require('../services/usersService')
 
 class CartsRouter extends Router {
     init() {
 
         const withController = callback => {
             return (req, res) => {
-                const service = new CartsService(
+                const cartService = new CartsService(
                     req.app.get('cartsStorage')
                 )
-                const controller = new CartController(service)
+                const userService = new UsersService(
+                    req.app.get('usersStorage')
+                )
+                const controller = new CartController(cartService, userService)
                 return callback(controller, req, res)
             }
         }
@@ -27,8 +31,14 @@ class CartsRouter extends Router {
         // Ruta para agregar el producto al arreglo products del carrito seleccionado por id
         this.post('/:cid/product/:pid', withController((controller, req, res) => controller.addProductToCart(req, res)));
 
+        // Ruta para agregar el producto al arreglo products del carrito seleccionado por id
+        this.post('/product/:pid', withController((controller, req, res) => controller.addProductToCartView(req, res)));
+
         // Ruta para eliminar un producto por id correspondiente al carrito seleccionado por id
         this.delete('/:cid/products/:pid', withController((controller, req, res) => controller.deleteProductFromCart(req, res)));
+
+        // Ruta para eliminar un producto por id correspondiente al carrito seleccionado por id
+        this.delete('/product/:pid', withController((controller, req, res) => controller.deleteProductFromCartView(req, res)));
 
         // Ruta para actualizar los productos de un carrito por id de cart
         this.put('/:cid', withController((controller, req, res) => controller.updateCartProducts(req, res)));

@@ -1,10 +1,10 @@
-const { hashPassword } = require('../utils/hashing');
 const { emailAdmin } = require ('../env-config/adminConfig');
 
 class SesionController {
     
-    constructor(service){
+    constructor(service, cartsService){
         this.service = service
+        this.cartsService = cartsService
     }
 
     async createSession(req, res){
@@ -17,26 +17,6 @@ class SesionController {
         req.session.destroy(err => {
             res.redirect('/')
         })
-    }
-
-    async register(req, res){
-        console.log('usuario: ', req.user);
-        res.redirect('/')
-    }
-
-    async resetPassword(req, res){
-        const {email, password} = req.body
-        if(!email || !password){
-            return res.status(400).json({error: 'Invalid credentials'})
-        }
-        const user = await this.service.getByEmail( email );
-        if (!user) {
-            return res.status(400).json({ error: 'User not found' });
-        }
-        
-        await this.service.updatePassword(email, {$set: {password: hashPassword(password)}})
-    
-        res.redirect('/')
     }
 
     async getCurrent(req, res){
@@ -62,8 +42,16 @@ class SesionController {
                 if (!user) {
                     return res.status(404).send('User not found');
                 }
+                user = {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    age: user.age,
+                    email: user.email,
+                    rol: user.rol,
+                    cart: await this.cartsService.getById(user.cart)
+                }
             }
-    
+                
             res.status(200).json(user);
         } catch (error) {
             console.error(error);

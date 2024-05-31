@@ -52,16 +52,29 @@ class ProductsService {
         })
     }
 
-    async updateById(id){
+    async getStockById(id){
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('invalid params');
         }
+        const product = await this.storage.getById(id);
+        const stock = product.stock
+        return stock
+    }
+
+    async updateStockById(id){
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new Error('invalid params');
+        }
+        const product = this.storage.getById(id);
+        const stock = product.stock
+
         return this.storage.updateById(id)
     }
 
     async findByCode(code){
         return this.storage.findByCode(code)
     }
+
 }
 
 module.exports = { ProductsService }

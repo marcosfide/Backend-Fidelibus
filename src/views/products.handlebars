@@ -2,6 +2,9 @@
     <a href="/">Inicio</a>
     <a href="/profile">My Profile</a>
     <a href="/products">Products</a>
+    {{#if isNotAdmin}}
+    <a href="/cart">Cart</a>
+    {{/if}}
     <a href="/api/session/logout">Logout</a>
 </div>
 <h1>Bienvenido {{firstName}} {{lastName}}! {{email}} Rol: {{rol}}</h1>
@@ -16,7 +19,14 @@
                 <h5>Stock: {{this.stock}}</h5>
                 <h5>Imagen: {{this.thumbnail}}</h5>
                 <h5>Codigo: {{this.code}}</h5>
-                <button>Agregar al carrito</button>
+                <form class="add-to-cart-form" data-product-id="{{this._id}}" data-cart-id="{{cartId}}" action="/api/carts/product/{{this._id}}" method="post">
+                    <div class="quantity-controls">
+                        <button type="button" class="decrement">-</button>
+                        <input type="number" name="quantity" class="quantity" value="1" min="1" max="{{this.stock}}" readonly>
+                        <button type="button" class="increment">+</button>
+                    </div>
+                    <button type="submit" id="sendProduct">Agregar al carrito</button>
+                </form>
             </li>
         {{/each}}
     </ul>

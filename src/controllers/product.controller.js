@@ -142,9 +142,10 @@ class ProductController {
                 thumbnail
             });
     
-            return res.status(201).json({ success: true });
-        } catch (error) {
-            return this.#handleError(res, err)
+            res.redirect(302, '/productsManager'); // Corregido
+        } catch (err) { // Asegúrate de que err esté definido
+            console.error(err); // Opcional: Loguear el error para depuración
+            res.status(500).send({ message: 'Error al añadir el producto' });
         }
     }
 
@@ -159,7 +160,8 @@ class ProductController {
             }
 
             await this.service.deleteById(productId)
-            res.status(200).json({ success: true, message: `Producto id: ${productId} eliminado correctamente` })
+            
+            res.redirect('/productsManager');
         } catch (error) {
             return this.#handleError(res, err)
         }

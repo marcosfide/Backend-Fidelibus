@@ -1,3 +1,9 @@
+<div>
+    <a href="/">Inicio</a>
+    <a href="/profile">My Profile</a>
+    <a href="/products">Products</a>
+    <a href="/api/session/logout">Logout</a>
+</div>
 <div class="products-list">
     <h1>Listado de productos</h1>
     <div class="card-product">
@@ -23,7 +29,7 @@
                         <td> {{this.thumbnail}}</td>
                         <td> {{this.code}}</td>
                         <td>
-                            <form method="post" action="/managerDBProductsView/{{this._id}}?_method=DELETE"  class="btn-eliminar">
+                            <form method="post" action="/api/products/{{this._id}}?_method=DELETE"  class="btn-eliminar">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button type="submit">Eliminar</button>
                             </form>
@@ -41,7 +47,7 @@
 </div>
 <div class="product-form">
     <h1>{{this.title}}</h1>
-    <form action="/managerDBProductsView" method="post">
+    <form action="/api/products" method="post">
 
         <label for="title">Nombre</label>
         <input type="text" name="title" id="inputTitle">

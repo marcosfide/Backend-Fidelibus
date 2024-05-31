@@ -3,13 +3,16 @@ const { emailAdmin } = require ('../env-config/adminConfig');
 
 class ViewController {
     
-    constructor(productService, cartService){
+    constructor(productService, cartService, sessionService, userService){
         this.productService = productService
         this.cartService = cartService
+        this.sessionService = sessionService
+        this.userService = userService
     }
 
     async getHome(req, res){
         const isLoggedIn = ![null, undefined].includes(req.session.user)
+        const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin : false
 
         res.render('index', {
             title: 'Home',
@@ -18,7 +21,9 @@ class ViewController {
                 'index.js'
             ],
             isLoggedIn,
-            isNotLoggedIn: !isLoggedIn
+            isNotLoggedIn: !isLoggedIn,
+            isAdmin ,
+            isNotAdmin: !isAdmin
         })
     }
 
@@ -88,11 +93,13 @@ class ViewController {
             const productId = req.params.pid;
             const idFromSession = req.session.user._id;
             const user = await User.findOne({_id: idFromSession});
+            const isLoggedIn = ![null, undefined].includes(req.session.user)
+            const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin : false
     
             if (!user) {
                 return res.status(404).send('User not found');
             }
-            console.log(productId);
+
             const product = await this.productService.getById(productId);
             if (!product) {
                 return res.status(400).json({ error: 'Producto no encontrado.' });
@@ -110,7 +117,9 @@ class ViewController {
                 ],
                 firstName: user.firstName,
                 lastName: user.lastName,
-                email: user.email
+                email: user.email,
+                isAdmin ,
+                isNotAdmin: !isAdmin
             });
     
         } catch (error) {
@@ -146,6 +155,8 @@ class ViewController {
             limit = limit ? limit : 10;
             page = page ? page : 1;
             const query = {};
+            const isLoggedIn = ![null, undefined].includes(req.session.user)
+            const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin : false
                 
             // Agregar filtro por categoría si está presente
             if (category) {
@@ -213,7 +224,9 @@ class ViewController {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                rol: user.rol
+                rol: user.rol,
+                isAdmin ,
+                isNotAdmin: !isAdmin
             });
             return products
         } catch (error) {
@@ -223,17 +236,24 @@ class ViewController {
     
     async getCartById(req, res) {
         try {
-            const cartId = req.params.cid
+            const user = await this.userService.getById(req.session.user._id)
+            const cartId = user.cart;
             const cart = await this.cartService.getById(cartId)
             
             if (!cart) {
                 res.status(400).json({ error: 'cart no encontrado.' });
                 return;
             }
+            
+            // Calcula el total del carrito
+            const totalCart = await this.cartService.getTotalCart(cartId)
+            
             console.log(cart.products); // Verifica los datos antes de renderizar
+            
             res.render('cart', {
                 cartProducts: cart.products,
-                title: 'Cart', // Puedes incluir un título aquí
+                title: 'Cart',
+                totalCart: totalCart,
                 styles: [
                     'product.css'
                 ],
@@ -243,6 +263,64 @@ class ViewController {
 
         } catch (error) {
             res.status(500).send(`Error interno del servidor: ${error.message}`);
+        }
+    }
+
+    async getProductsManager(req, res){
+        try {
+            let { limit, page, sort, category, availability } = req.query;
+            limit = limit ? limit : 10;
+            page = page ? page : 1;
+            const query = {};
+                
+            // Agregar filtro por categoría si está presente
+            if (category) {
+                query.category = category;
+            }
+    
+            // Agregar filtro por disponibilidad de stock si no se especifica una categoría
+            if (availability === 's') {
+                query.stock = { $gte: 1 };
+            } else if(availability === 'n'){
+                query.stock = 0;
+            }
+    
+            const options = {
+                limit: limit,
+                page: page,
+                sort: sort ? { price: sort } : undefined,
+                lean: true
+            };
+    
+            const products = await this.productService.paginate(query, options);
+
+            // Validar si page no está definido o es menor que 1
+            if (isNaN(page) || page < 1 || page > products.totalPages) {
+                throw new Error('¡Página no válida!');
+            }
+
+            const baseUrl = req.baseUrl;
+            const queryParams = req.query;
+
+            // Obtener los enlaces previo y siguiente
+            const prevLink = await this.buildPrevLink(baseUrl, queryParams, products.page);
+            const nextLink = await this.buildNextLink(baseUrl, queryParams, products.page, products.totalPages);
+
+            res.render('managerProducts', { // Renderizamos el listado y form
+                products: products.docs,
+                prevLink: prevLink ? `http://localhost:8080/productsManager/${prevLink}` : null,
+                nextLink: nextLink ? `http://localhost:8080/productsManager/${nextLink}` : null,
+                page: products.page,
+                totalPages: products.totalPages,
+                styles: [
+                    'product.css'
+                ],
+                title: 'Product Manager'
+            });
+            return products
+        } catch (error) {
+            console.error("Error al obtener productos:", error);
+            res.status(500).send("Error interno del servidor");
         }
     }
 }
