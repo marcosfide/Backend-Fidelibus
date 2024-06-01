@@ -35,18 +35,27 @@ class TicketController {
     
             const cart = await this.cartService.getById(cartId)
 
-            // Validar el stock de cada producto en el carrito
+            let cartUpdated = []
+            const productsOutOfStock = []
             for (const cartItem of cart.products) {
                 const stock = await this.productService.getStockById(cartItem.product._id);
+                if (cartItem.quantity <= stock) {
+                    await this.productService.subtractFromStock(cartItem._id,cartItem.quantity)
+                    cartUpdated.push(cartItem)
+                }
                 if (cartItem.quantity > stock) {
-                    return res.status(400).json({ 
-                        status: 'error', 
-                        message: `No hay suficiente stock para el producto ${cartItem.product.title}` 
-                    });
+                    productsOutOfStock.push(cartItem.product)
+                    console.log(`El producto ${cartItem.product.title} no ha sido incluido en su compra debido a que no hay suficiente stock`)
                 }
             }
-            const totalCart = await this.cartService.getTotalCart(cartId);
-    
+
+            let messageOutOfStock = 'Se ha procesado la compra correctamente con todos los productos!'
+            if (productsOutOfStock.length > 0) {
+                messageOutOfStock = `Los productos: ${productsOutOfStock} no fueron incluídos en la compra por falta de stock`;
+            }
+
+            const totalCart = await this.cartService.getTotalCart(cartUpdated);
+
             const ticketData = {
                 code: this.generateUniqueCode(),
                 purchase_datatime: new Date(),
@@ -55,7 +64,9 @@ class TicketController {
             };
     
             await this.ticketService.createOne(ticketData);
-            res.status(201).json({ status: 'success', message: 'Se ha creado un nuevo ticket' });
+            await this.cartService.clearCart(cartId)
+
+            res.status(201).json({ status: 'success', message: 'Se ha creado un nuevo ticket', ticketData, messageOutOfStock});
         } catch (error) {
             return this.#handleError(res, error);
         }

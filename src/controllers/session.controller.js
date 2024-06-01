@@ -1,4 +1,4 @@
-const { emailAdmin } = require ('../env-config/adminConfig');
+const { emailAdmin, emailSuperAdmin } = require ('../env-config/adminConfig');
 
 class SesionController {
     
@@ -26,7 +26,7 @@ class SesionController {
         try {
             let user;
             // Verificar si el usuario autenticado es administrativo
-            if (req.session.user.email === emailAdmin) {
+            if (req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin) {
                 // Utilizar el objeto de usuario administrativo creado dinámicamente
                 user = {
                     firstName: 'Administrador',

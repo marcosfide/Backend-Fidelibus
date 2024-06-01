@@ -42,6 +42,26 @@ class CartsStorage {
 
         return (cart, ' deleted')
     }
+
+    async clearCart(id){
+        const cart = await CartModel.findById(id);
+        if (!cart) {
+            throw new Error('not found');
+        }
+        cart.products = [];
+        await cart.save();
+        return cart;
+    }
+
+    async updateOne(cart){
+        console.log(cart);
+        const { _id, ...updateData } = cart;
+        const updatedCart = await CartModel.findByIdAndUpdate(_id, updateData, { new: true, runValidators: true });
+        if (!updatedCart) {
+            throw new Error('Cart no encontrado');
+        }
+        return updatedCart;
+    }
 }
 
 module.exports = CartsStorage

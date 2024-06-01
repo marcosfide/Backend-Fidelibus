@@ -53,6 +53,15 @@ class ProductsStorage {
         return (product, ' deleted')
     }
 
+    async updateOne(product){
+        const { _id, ...updateData } = product;
+        const updatedProduct = await ProductModel.findByIdAndUpdate(_id, updateData, { new: true, runValidators: true });
+        if (!updatedProduct) {
+            throw new Error('not found');
+        }
+        return updatedProduct;
+    }
+
     async findByCode(code){
         const product = await ProductModel.findOne({ code: code })
         return product

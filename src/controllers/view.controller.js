@@ -1,5 +1,5 @@
 const User = require('../dao/models/user.model')
-const { emailAdmin } = require ('../env-config/adminConfig');
+const { emailAdmin, emailSuperAdmin } = require ('../env-config/adminConfig');
 
 class ViewController {
     
@@ -12,7 +12,7 @@ class ViewController {
 
     async getHome(req, res){
         const isLoggedIn = ![null, undefined].includes(req.session.user)
-        const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin : false
+        const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin : false
 
         res.render('index', {
             title: 'Home',
@@ -63,6 +63,15 @@ class ViewController {
                     email: emailAdmin,
                     rol: 'Admin'
                 };
+            } else if (req.session.user.email === emailSuperAdmin) {
+                // Utilizar el objeto de usuario administrativo creado dinámicamente
+                user = {
+                    firstName: 'Super',
+                    lastName: 'Admin',
+                    age: 28,
+                    email: emailSuperAdmin,
+                    rol: 'Admin'
+                };
             } else {
                 // Buscar el usuario en la base de datos
                 const idFromSession = req.session.user._id;
@@ -94,7 +103,7 @@ class ViewController {
             const idFromSession = req.session.user._id;
             const user = await User.findOne({_id: idFromSession});
             const isLoggedIn = ![null, undefined].includes(req.session.user)
-            const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin : false
+            const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin : false
     
             if (!user) {
                 return res.status(404).send('User not found');
@@ -156,7 +165,7 @@ class ViewController {
             page = page ? page : 1;
             const query = {};
             const isLoggedIn = ![null, undefined].includes(req.session.user)
-            const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin : false
+            const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin : false
                 
             // Agregar filtro por categoría si está presente
             if (category) {
@@ -196,6 +205,15 @@ class ViewController {
                     lastName: 'Primero',
                     age: 28,
                     email: emailAdmin,
+                    rol: 'Admin'
+                };
+            } else if (req.session.user.email === emailSuperAdmin) {
+                // Utilizar el objeto de usuario administrativo creado dinámicamente
+                user = {
+                    firstName: 'Super',
+                    lastName: 'Admin',
+                    age: 28,
+                    email: emailSuperAdmin,
                     rol: 'Admin'
                 };
             } else {
@@ -239,18 +257,16 @@ class ViewController {
             const user = await this.userService.getById(req.session.user._id)
             const cartId = user.cart;
             const cart = await this.cartService.getById(cartId)
-            
             if (!cart) {
                 res.status(400).json({ error: 'cart no encontrado.' });
                 return;
             }
             
             // Calcula el total del carrito
-            const totalCart = await this.cartService.getTotalCart(cartId)
-            
-            console.log(cart.products); // Verifica los datos antes de renderizar
+            const totalCart = await this.cartService.getTotalCart(cart.products)
             
             res.render('cart', {
+                cart: cart,
                 cartProducts: cart.products,
                 title: 'Cart',
                 totalCart: totalCart,

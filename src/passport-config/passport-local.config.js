@@ -4,7 +4,7 @@ const User = require('../dao/models/user.model');
 const Cart = require('../dao/models/cart.model');
 const hashingUtils = require('../utils/hashing');
 const { ObjectId } = require('mongodb');
-const { emailAdmin, passwordAdmin } = require ('../env-config/adminConfig');
+const { emailAdmin, passwordAdmin, emailSuperAdmin, passwordSuperAdmin } = require ('../env-config/adminConfig');
 
 
 const initializeStrategy = () => {
@@ -65,6 +65,18 @@ const initializeStrategy = () => {
                     age: 28,
                     email: emailAdmin,
                     password: passwordAdmin,
+                    rol: 'Admin',
+                    _id: newIdString
+                };
+                return done(null, user);
+            } else 
+            if (username === emailSuperAdmin && password === passwordSuperAdmin) {
+                const user = {
+                    firstName: 'Super',
+                    lastName: 'Admin',
+                    age: 28,
+                    email: emailSuperAdmin,
+                    password: passwordSuperAdmin,
                     rol: 'Admin',
                     _id: newIdString
                 };

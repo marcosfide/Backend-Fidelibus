@@ -1,6 +1,6 @@
 const Router = require('./router')
 const ViewController = require ('../controllers/view.controller')
-const {userIsLoggedIn, userIsNotLoggedId, userIsAdmin} = require('../middlewares/auth.middleware')
+const {userIsLoggedIn, userIsNotLoggedId, userIsAdmin, userIsNotAdmin} = require('../middlewares/auth.middleware')
 const { ProductsService } = require('../services/productsService')
 const { CartsService } = require('../services/cartsService')
 const { SessionsService }= require('../services/sessionsService')
@@ -50,7 +50,7 @@ class ViewRouter extends Router {
         this.get('/products', userIsLoggedIn, withController((controller, req, res) => controller.getRenderProducts(req, res)));
 
         // Ruta para obtener cart por id
-        this.get('/cart', userIsLoggedIn, withController((controller, req, res) => controller.getCartById(req, res)));
+        this.get('/cart', userIsLoggedIn, userIsNotAdmin, withController((controller, req, res) => controller.getCartById(req, res)));
 
 
         // Ruta para acceder al form de datos del producto a agregar

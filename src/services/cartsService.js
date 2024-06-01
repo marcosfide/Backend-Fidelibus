@@ -24,15 +24,14 @@ class CartsService {
         return this.storage.getProductById(id);
     }
 
-    async getTotalCart(id) {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            throw new Error('invalid params');
-        }
-        const cart = await this.storage.getById(id);
+    
+    async getTotalCart(cart) {
+        let totalCart = 0;
 
-        const totalCart = cart.products.reduce((total, cartItem) => {
-            return total + (cartItem.product.price * cartItem.quantity);
-        }, 0);
+        for (const cartItem of cart) {
+            const productTotal = cartItem.quantity * cartItem.product.price;
+            totalCart += productTotal;
+        }
 
         return totalCart;
     }
@@ -57,6 +56,17 @@ class CartsService {
             throw new Error('invalid params');
         }
         return this.storage.updateById(id)
+    }
+
+    async updateOne(cart){
+        return this.storage.updateOne(cart)
+    }
+
+    async clearCart(id){
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new Error('invalid params');
+        }
+        return this.storage.clearCart(id);
     }
 }
 

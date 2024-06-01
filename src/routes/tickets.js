@@ -31,7 +31,7 @@ class TicketsRouter extends Router {
         this.get('/', withController((controller, req, res) => controller.getTickes(req, res)));
 
         // Ruta para crear un nuevo ticket
-        this.post('/', withController((controller, req, res) => controller.createTicket(req, res)));
+        this.post('/:cid/purchase', withController((controller, req, res) => controller.createTicket(req, res)));
 
 
     }

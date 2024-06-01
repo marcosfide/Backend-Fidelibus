@@ -8,7 +8,6 @@
 <div class="card-product">
     <ul>
         {{#each cartProducts}}
-        <script>console.log(cartProducts)</script>
             <li>
                 <h3>Producto: {{this.product.title}}</h3>
                 <h3>Cantidad: {{this.quantity}}</h3>
@@ -25,7 +24,7 @@
         {{/each}}
     </ul>
     <h2>Precio total: ${{totalCart}}</h2>
-    <form method="post" action="/api/tickets">
+    <form method="post" action="/api/tickets/{{cart._id}}/purchase">
         <button type="submit">Terminar compra</button>
     </form>
 </div>

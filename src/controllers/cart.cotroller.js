@@ -10,7 +10,7 @@ class CartController {
 
     #handleError(res, err) {
         if (err.message === 'not found') {
-            return res.status(404).json({ error: 'Not found' });
+            return res.status(404).json({ error: 'Cart not found' });
         }
         if (err.message === 'invalid params') {
             return res.status(400).json({ error: 'Invalid params' });

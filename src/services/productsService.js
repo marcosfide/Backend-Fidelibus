@@ -71,6 +71,18 @@ class ProductsService {
         return this.storage.updateById(id)
     }
 
+    async subtractFromStock(id,quantity){
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new Error('invalid params');
+        }
+
+        const product = await this.storage.getById(id);
+        
+        product.stock = product.stock - quantity
+
+        return await this.storage.updateOne(product)
+    }
+
     async findByCode(code){
         return this.storage.findByCode(code)
     }
