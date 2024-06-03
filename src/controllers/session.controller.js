@@ -1,3 +1,4 @@
+const { SaveUserResponse } = require('../dto/responses/saveUserResponse');
 const { emailAdmin, emailSuperAdmin } = require ('../env-config/adminConfig');
 
 class SesionController {
@@ -26,13 +27,22 @@ class SesionController {
         try {
             let user;
             // Verificar si el usuario autenticado es administrativo
-            if (req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin) {
+            if (req.session.user.email === emailAdmin) {
                 // Utilizar el objeto de usuario administrativo creado dinámicamente
                 user = {
                     firstName: 'Administrador',
                     lastName: 'Primero',
                     age: 28,
                     email: emailAdmin,
+                    rol: 'Admin'
+                };
+            } else if (req.session.user.email === emailSuperAdmin) {
+                // Utilizar el objeto de usuario administrativo creado dinámicamente
+                user = {
+                    firstName: 'Super',
+                    lastName: 'Admin',
+                    age: 28,
+                    email: emailSuperAdmin,
                     rol: 'Admin'
                 };
             } else {
@@ -42,17 +52,9 @@ class SesionController {
                 if (!user) {
                     return res.status(404).send('User not found');
                 }
-                user = {
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    age: user.age,
-                    email: user.email,
-                    rol: user.rol,
-                    cart: await this.cartsService.getById(user.cart)
-                }
             }
-                
-            res.status(200).json(user);
+            
+            res.status(200).json(new SaveUserResponse(user));
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
