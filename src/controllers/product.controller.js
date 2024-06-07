@@ -108,47 +108,19 @@ class ProductController {
         }
     }
 
-    async addProduct(req, res) {        
+    async addProduct(req, res, next) {
         try {
             const product = req.body;
-            let { title, description, code, price, status, stock, category, thumbnail } = product;
-            const existingProduct = await this.service.findByCode(code);
-            if (existingProduct) {
-                return res.status(400).json({ error: `El código de producto ${code} ya se encuentra en la base de datos` });
-            }
-    
-            // Validar los campos del producto
-            const requiredFields = title && description && code && price && stock && category;
-            price = parseFloat(price);
-            stock = parseInt(stock, 10);
-            status = (status === 'true') || (status === true); // Asegurar que status es booleano
-            const textFields = typeof title === 'string' && typeof description === 'string' && typeof code === 'string' && typeof category === 'string';
-            const numberFields = typeof price === 'number' && !isNaN(price) && price > 0 && typeof stock === 'number' && !isNaN(stock) && stock >= 0;
-            const statusField = typeof status === 'boolean';
-    
-            if (!requiredFields || !textFields || !numberFields || !statusField) {
-                return res.status(400).json({ error: "Los campos del producto no son válidos" });
-            }
     
             // Crear el nuevo producto
-            await this.service.createOne({
-                title,
-                description,
-                code,
-                price,
-                status,
-                stock,
-                category,
-                thumbnail
-            });
+            await this.service.createOne(product);
     
             res.redirect(302, '/productsManager'); // Corregido
-        } catch (err) { // Asegúrate de que err esté definido
-            console.error(err); // Opcional: Loguear el error para depuración
-            res.status(500).send({ message: 'Error al añadir el producto' });
+        } catch (err) { // Propagar el error al middleware de manejo de errores
+            next(err);
         }
     }
-
+    
     async deleteProductById(req, res) {
         try {
             const productId = req.params.pid

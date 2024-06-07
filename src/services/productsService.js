@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const { CustomError } = require('./errors/CustomError');
+const { ErrorCodes } = require('./errors/errorCodes');
+const { generateInvalidProductDataError } = require('./products.error');
 
 class ProductsService {
 
@@ -28,28 +31,36 @@ class ProductsService {
         return this.storage.deleteById(id)
     }
 
-    async createOne({
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnail
-    }){
-        if(!title || !description || !code || !price || !status || !stock || !category || !thumbnail){
-            throw new Error('invalid params')
+    async createOne(product){
+        console.log('Datos recibidos:', product); // Loguear los datos recibidos
+
+        let { title, description, code, price, status, stock, category, thumbnail } = product;
+
+        if(!title || title === '' || !description || description === '' || !code || code === '' || !price || price === '' || !stock || stock === '' || !category || category === '' || !thumbnail || thumbnail === ''){
+            throw CustomError.createError({
+                name: 'InvalidProductData',
+                cause: generateInvalidProductDataError({ title, description, code, price, status, stock, category, thumbnail }),
+                message: 'Error trying to create a new product',
+                code: ErrorCodes.INVALID_TYPES_ERROR
+            })
         }
-        return this.storage.createOne({title,
-            description,
-            code,
-            price,
-            status,
-            stock,
-            category,
-            thumbnail
-        })
+
+        const existingProduct = await this.storage.findByCode(code);
+        if (existingProduct) {
+            console.log(ErrorCodes.DATABASE_ERROR);
+            throw CustomError.createError({
+                name: 'ExistingCode',
+                cause: `El producto con el código ${code} ya se encuentra registrado`,
+                message: 'Error trying to create a new product',
+                code: ErrorCodes.DATABASE_ERROR
+            })
+        }
+
+        price = parseFloat(price);
+        stock = parseInt(stock, 10);
+        product.status = (status === 'true') || (status === true); // Asegurar que status es booleano
+
+        return this.storage.createOne(product)
     }
 
     async getStockById(id){

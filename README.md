@@ -17,6 +17,16 @@ Para ejecutar el proyecto, asegúrate de tener Node.js instalado en tu sistema. 
 ```bash
 npm install
 ```
+
+## Configuración del archivo .env
+
+Antes de ejecutar el servidor, es necesario crear un archivo .env en el root del proyecto con las credenciales correspondientes (previamente enviadas). Este archivo debe contener las variables de entorno necesarias para la configuración del proyecto.
+###### Es importante que el archivo .env sea creado en el root del proyecto
+
+## Ejecución del servidor
+
+###### Es importante ejecutar el proyecto utilizando nodemon desde afuera de la carpeta src, sin ingresar en ella, utilizando el siguiente comando:
+
 ```bash
 nodemon src/App.js
 ```
@@ -28,9 +38,9 @@ Asegúrate también de tener MongoDB instalado en tu sistema. Puedes descargarlo
 
 El servidor estará corriendo en las siguientes URLs:
 
-### URLs para las vistas utilizando session /
+### URLs para las vistas
 
-URL al index del proyecto, por la cual podrás seguir interactivamente las distintas secciones estando logueado:
+URL al index del proyecto, por la cual podrás seguir interactivamente las distintas secciones del proyecto:
 - [http://localhost:8080](http://localhost:8080)
 
 ### URL para obtener los datos del usuario actualmente logueado

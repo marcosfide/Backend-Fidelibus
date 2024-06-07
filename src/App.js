@@ -24,6 +24,7 @@ const ChatRouter = require('./routes/chat.js');
 const RealTimeProductsRouter = require('./routes/realTimeProducts.js')
 const ViewRouter = require('./routes/views.js')
 const TicketRouter = require('./routes/tickets.js')
+const MockingProductsRouter = require('./routes/mockingProducts.js')
 
 
 const productsRouter = new ProductsRouter()
@@ -34,6 +35,7 @@ const chatRouter = new ChatRouter()
 const realTimeProductsRouter = new RealTimeProductsRouter()
 const viewsRouter = new ViewRouter()
 const ticketsRouter = new TicketRouter()
+const mockingProductsRouter = new MockingProductsRouter()
 
 const ProductManager = require('./dao/dbManager/ProductManager');
 const CartManager = require('./dao/dbManager/CartManager');
@@ -48,6 +50,7 @@ const CartsStorage = require('./persistence/cartsStorage.js');
 const SessionsStorage = require('./persistence/sessionsStorage.js');
 const UsersStorage = require('./persistence/usersStorage.js');
 const TicketsStorage = require('./persistence/ticketsStorage.js');
+const { errorHandler } = require('./services/errors/errorHandler.js');
 
 
 
@@ -81,6 +84,11 @@ app.use('/api/session', sessionRouter.getRouter());
 app.use('/', viewsRouter.getRouter());
 app.use('/realTimeProducts', realTimeProductsRouter.getRouter());
 app.use('/chat', chatRouter.getRouter());
+app.use('/chat', chatRouter.getRouter());
+app.use('/mockingproducts', mockingProductsRouter.getRouter());
+
+// error haldler siempre dsp de las rutas
+app.use(errorHandler)
 
 // Inicialización de la base de datos y del servidor
 const main = async () => {

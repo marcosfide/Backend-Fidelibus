@@ -20,27 +20,8 @@ class ProductsStorage {
         return product
     }
 
-    async createOne({
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnail
-    }){
-        const product = await ProductModel.create({
-            title,
-            description,
-            code,
-            price,
-            status,
-            stock,
-            category,
-            thumbnail
-        })
-        return product
+    async createOne(product){
+        return await ProductModel.create(product)
     }
 
     async deleteById(id){
