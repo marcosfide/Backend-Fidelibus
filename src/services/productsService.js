@@ -32,7 +32,7 @@ class ProductsService {
     }
 
     async createOne(product){
-        console.log('Datos recibidos:', product); // Loguear los datos recibidos
+        console.log('Datos recibidos:', product);
 
         let { title, description, code, price, status, stock, category, thumbnail } = product;
 
@@ -47,7 +47,6 @@ class ProductsService {
 
         const existingProduct = await this.storage.findByCode(code);
         if (existingProduct) {
-            console.log(ErrorCodes.DATABASE_ERROR);
             throw CustomError.createError({
                 name: 'ExistingCode',
                 cause: `El producto con el código ${code} ya se encuentra registrado`,

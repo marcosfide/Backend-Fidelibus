@@ -12,6 +12,10 @@ const ticketSchema = new Schema({
         type: Date,  //created_at
         required: true
     },
+    products: {
+        type: Array,
+        required: true
+    },
     amount: {
         type: Number,  //$ total de la compra
         required: true

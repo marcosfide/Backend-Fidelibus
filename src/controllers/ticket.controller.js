@@ -56,9 +56,22 @@ class TicketController {
 
             const totalCart = await this.cartService.getTotalCart(cartUpdated);
 
+            console.log('cart Updated', cartUpdated);
+
+            const ticketProducts = cartUpdated.map(cartItem => ({
+                productId: cartItem.product._id,
+                productName: cartItem.product.title,
+                productPrice: cartItem.product.price,
+                productQuantity: cartItem.quantity,
+                productTotalAmount: cartItem.quantity * cartItem.product.price
+            }));
+
+            console.log('ricketproductsss', ticketProducts);
+    
             const ticketData = {
                 code: this.generateUniqueCode(),
                 purchase_datatime: new Date(),
+                products: ticketProducts,
                 amount: totalCart,
                 purchaser: user.email
             };
