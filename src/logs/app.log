@@ -75,3 +75,38 @@ http: Request al endpoint: /
 http: Request al endpoint: /login
 http: Request al endpoint: /api/session/login
 http: Request al endpoint: /
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
