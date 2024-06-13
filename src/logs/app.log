@@ -1,0 +1,77 @@
+{"level":"http","message":"Request al endpoint: /loggerTest"}
+{"level":"debug","message":"Debug test - Relevancia: 5"}
+{"level":"http","message":"HTTP TEST - Relevancia: 4"}
+{"level":"info","message":"Info test - Relevancia: 3"}
+{"level":"warn","message":"Warning test - Relevancia: 2"}
+{"level":"error","message":"Error test - Relevancia: 1"}
+{"level":"error","message":"Fatal test - Relevancia: 0"}
+{"level":"http","message":"Request al endpoint: /loggerTest"}
+{"level":"debug","message":"Debug test - Relevancia: 5"}
+{"level":"http","message":"HTTP TEST - Relevancia: 4"}
+{"level":"info","message":"Info test - Relevancia: 3"}
+{"level":"warn","message":"Warning test - Relevancia: 2"}
+{"level":"error","message":"Error test - Relevancia: 1"}
+{"level":"error","message":"Fatal test - Relevancia: 0"}
+[37mhttp[39m: Request al endpoint: /loggerTest
+[37mdebug[39m: Debug test - Relevancia: 5
+[37mhttp[39m: HTTP TEST - Relevancia: 4
+[34minfo[39m: Info test - Relevancia: 3
+[37mhttp[39m: Request al endpoint: /loggerTest
+[37mdebug[39m: Debug test - Relevancia: 5
+[37mhttp[39m: HTTP TEST - Relevancia: 4
+[34minfo[39m: Info test - Relevancia: 3
+[37mhttp[39m: Request al endpoint: /loggerTest
+[37mdebug[39m: Debug test - Relevancia: 5
+[37mhttp[39m: HTTP TEST - Relevancia: 4
+[34minfo[39m: Info test - Relevancia: 3
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+error: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /loggerTest
+debug: Debug test - Relevancia: 5
+http: HTTP TEST - Relevancia: 4
+info: Info test - Relevancia: 3
+warn: Warning test - Relevancia: 2
+error: Error test - Relevancia: 1
+fatal: Fatal test - Relevancia: 0
+http: Request al endpoint: /
+http: Request al endpoint: /login
+http: Request al endpoint: /api/session/login
+http: Request al endpoint: /

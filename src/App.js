@@ -12,6 +12,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 
+const {useLogger} = require('./utils/logger.js')
 
 const initializeStrategy = require('./passport-config/passport-local.config.js');
 const initializeGithubStrategy = require('./passport-config/passport-github.config.js');
@@ -25,6 +26,7 @@ const RealTimeProductsRouter = require('./routes/realTimeProducts.js')
 const ViewRouter = require('./routes/views.js')
 const TicketRouter = require('./routes/tickets.js')
 const MockingProductsRouter = require('./routes/mockingProducts.js')
+const LoggerTestRouter = require('./routes/logger.js')
 
 
 const productsRouter = new ProductsRouter()
@@ -36,6 +38,7 @@ const realTimeProductsRouter = new RealTimeProductsRouter()
 const viewsRouter = new ViewRouter()
 const ticketsRouter = new TicketRouter()
 const mockingProductsRouter = new MockingProductsRouter()
+const loggerTestRouter = new LoggerTestRouter()
 
 const ProductManager = require('./dao/dbManager/ProductManager');
 const CartManager = require('./dao/dbManager/CartManager');
@@ -70,6 +73,8 @@ app.use(methodOverride('_method'));
 app.use(cookieParser())
 app.use(sessionMiddleware)
 
+app.use(useLogger)
+
 initializeStrategy()
 initializeGithubStrategy()
 app.use(passport.initialize())
@@ -86,6 +91,7 @@ app.use('/realTimeProducts', realTimeProductsRouter.getRouter());
 app.use('/chat', chatRouter.getRouter());
 app.use('/chat', chatRouter.getRouter());
 app.use('/mockingproducts', mockingProductsRouter.getRouter());
+app.use('/loggerTest', loggerTestRouter.getRouter());
 
 // error haldler siempre dsp de las rutas
 app.use(errorHandler)
