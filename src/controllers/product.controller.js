@@ -110,13 +110,13 @@ class ProductController {
 
     async addProduct(req, res, next) {
         try {
-            const product = req.body;
-    
-            // Crear el nuevo producto
+            const product = {
+                ...req.body,
+                owner: req.session.user.email ? req.session.user.email : 'Admin'
+            };
             await this.service.createOne(product);
-    
-            res.redirect(302, '/productsManager'); // Corregido
-        } catch (err) { // Propagar el error al middleware de manejo de errores
+            res.redirect(302, '/productsManager'); 
+        } catch (err) {
             next(err);
         }
     }

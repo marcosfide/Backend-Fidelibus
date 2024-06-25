@@ -10,22 +10,39 @@ class ViewController {
         this.userService = userService
     }
 
-    async getHome(req, res){
-        const isLoggedIn = ![null, undefined].includes(req.session.user)
-        const isAdmin = isLoggedIn ? req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin : false
-
+    async getHome(req, res) {
+        // Verifica si req.session.user está definido
+        const isLoggedIn = req.session.user !== undefined && req.session.user !== null;
+    
+        // Inicializa isAdmin como false
+        let isAdmin = false;
+        let user = null;
+    
+        if (isLoggedIn) {
+            // Verifica si req.session.user.email está definido
+            if (req.session.user.email) {
+                isAdmin = req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin;
+                // Obtén el usuario solo si no es administrador
+                if (!isAdmin) {
+                    user = await this.userService.getByEmail(req.session.user.email);
+                }
+            }
+        }
+    
+        // Determina si el usuario es premium o administrador
+        const isPremium = user ? user.rol === 'Premium' : isAdmin ? 'Admin' : false;
+    
         res.render('index', {
             title: 'Home',
             useWS: true,
-            scripts: [
-                'index.js'
-            ],
+            scripts: ['index.js'],
             isLoggedIn,
             isNotLoggedIn: !isLoggedIn,
-            isAdmin ,
-            isNotAdmin: !isAdmin
-        })
-    }
+            isAdmin,
+            isNotAdmin: !isAdmin,
+            isPremium
+        });
+    }    
 
     async getLogin(req, res){
         res.render('login', {
@@ -33,12 +50,20 @@ class ViewController {
         })
     }
 
-    async getResetPassword(req, res){
-        res.render('resetPassword', {
+    async getEmailToSendResetPassword(req, res){
+        res.render('emailToSendResetPassword', {
             title: 'Reset password',
         })
     }
 
+    async getResetPassword(req, res) {
+        const { token } = req.query;
+        res.render('resetPassword', {
+            title: 'Reset password',
+            token: token
+        });
+    }
+    
     async getRegister(req, res){
         res.render('register', {
             title: 'Register',
@@ -51,7 +76,12 @@ class ViewController {
         }
 
         try {
-            let user;
+            let isAdmin = false;
+            let user = null;
+            
+            if (req.session.user.email) {
+                isAdmin = req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin;
+            }
 
             // Verificar si el usuario autenticado es administrativo
             if (req.session.user.email === emailAdmin) {
@@ -81,6 +111,8 @@ class ViewController {
                 }
             }
 
+            const isPremium = user ? user.rol === 'Premium' : isAdmin ? 'Admin' : false;
+
             res.render('profile', {
                 title: 'My profile',
                 user: {
@@ -88,8 +120,12 @@ class ViewController {
                     lastName: user.lastName,
                     age: user.age,
                     email: user.email,
-                    rol: user.rol
-                }
+                    rol: user.rol,
+                    id: user.id
+                },
+                isAdmin,
+                isNotAdmin: !isAdmin,
+                isPremium
             });
         } catch (error) {
             console.error(error);
@@ -225,6 +261,8 @@ class ViewController {
                 }
             }
 
+            const isPremium = user ? user.rol === 'Premium' : isAdmin ? 'Admin' : false;
+
             // Obtener los enlaces previo y siguiente
             const prevLink = await this.buildPrevLink(baseUrl, queryParams, products.page);
             const nextLink = await this.buildNextLink(baseUrl, queryParams, products.page, products.totalPages);
@@ -244,7 +282,8 @@ class ViewController {
                 email: user.email,
                 rol: user.rol,
                 isAdmin ,
-                isNotAdmin: !isAdmin
+                isNotAdmin: !isAdmin,
+                isPremium
             });
             return products
         } catch (error) {
@@ -264,6 +303,14 @@ class ViewController {
             
             // Calcula el total del carrito
             const totalCart = await this.cartService.getTotalCart(cart.products)
+
+            let isAdmin = false;
+
+            if (req.session.user.email) {
+                isAdmin = req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin;
+            }
+
+            const isPremium = user ? user.rol === 'Premium' : isAdmin ? 'Admin' : false;
             
             res.render('cart', {
                 cart: cart,
@@ -273,6 +320,9 @@ class ViewController {
                 styles: [
                     'product.css'
                 ],
+                isAdmin,
+                isNotAdmin: !isAdmin,
+                isPremium
             });
 
             return cart
@@ -282,46 +332,29 @@ class ViewController {
         }
     }
 
-    async getProductsManager(req, res){
+    async getProductsManager(req, res, next) {
         try {
-            let { limit, page, sort, category, availability } = req.query;
-            limit = limit ? limit : 10;
-            page = page ? page : 1;
-            const query = {};
-                
-            // Agregar filtro por categoría si está presente
-            if (category) {
-                query.category = category;
-            }
+            const userEmail = req.session.user.email;
+            const products = await this.productService.getProductsManager(req.query, userEmail);
     
-            // Agregar filtro por disponibilidad de stock si no se especifica una categoría
-            if (availability === 's') {
-                query.stock = { $gte: 1 };
-            } else if(availability === 'n'){
-                query.stock = 0;
+            let isAdmin = false;
+            let user = null;
+            
+            if (req.session.user.email) {
+                isAdmin = req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin;
+                // Obtén el usuario solo si no es administrador
+                if (!isAdmin) {
+                    user = await this.userService.getByEmail(req.session.user.email);
+                }
             }
-    
-            const options = {
-                limit: limit,
-                page: page,
-                sort: sort ? { price: sort } : undefined,
-                lean: true
-            };
-    
-            const products = await this.productService.paginate(query, options);
-
-            // Validar si page no está definido o es menor que 1
-            if (isNaN(page) || page < 1 || page > products.totalPages) {
-                throw new Error('¡Página no válida!');
-            }
+            const isPremium = user ? user.rol === 'Premium' : isAdmin ? 'Admin' : false;
 
             const baseUrl = req.baseUrl;
             const queryParams = req.query;
-
             // Obtener los enlaces previo y siguiente
             const prevLink = await this.buildPrevLink(baseUrl, queryParams, products.page);
             const nextLink = await this.buildNextLink(baseUrl, queryParams, products.page, products.totalPages);
-
+    
             res.render('managerProducts', { // Renderizamos el listado y form
                 products: products.docs,
                 prevLink: prevLink ? `http://localhost:8080/productsManager/${prevLink}` : null,
@@ -331,14 +364,17 @@ class ViewController {
                 styles: [
                     'product.css'
                 ],
-                title: 'Product Manager'
+                title: 'Product Manager',
+                isAdmin,
+                isNotAdmin: !isAdmin,
+                isPremium
             });
-            return products
         } catch (error) {
             console.error("Error al obtener productos:", error);
             res.status(500).send("Error interno del servidor");
         }
     }
+    
 }
 
 

@@ -17,6 +17,47 @@ class ProductsService {
         return this.storage.paginate(query, options)
     }
 
+    async getProductsManager(queryParams, userEmail) {
+        try {
+            let { limit, page, sort, category, availability } = queryParams;
+            limit = limit ? limit : 10;
+            page = page ? page : 1;
+            const query = userEmail === 'adminCoder@coder.com' || userEmail === 'super@admin.com' ? {} : { owner: userEmail };
+                
+            // Agregar filtro por categoría si está presente
+            if (category) {
+                query.category = category;
+            }
+    
+            // Agregar filtro por disponibilidad de stock si no se especifica una categoría
+            if (availability === 's') {
+                query.stock = { $gte: 1 };
+            } else if(availability === 'n'){
+                query.stock = 0;
+            }
+    
+            const options = {
+                limit: limit,
+                page: page,
+                sort: sort ? { price: sort } : undefined,
+                lean: true
+            };
+            console.log('query', query,'options',options);
+    
+            const products = await this.storage.paginate(query, options);
+    
+            // Validar si page no está definido o es menor que 1
+            if (isNaN(page) || page < 1 || page > products.totalPages) {
+                throw new Error('¡Página no válida!');
+            }
+    
+            return products;
+        } catch (error) {
+            console.error("Error al obtener productos:", error);
+            throw new Error("Error interno del servidor");
+        }
+    }
+
     async getById(id) {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('invalid params');

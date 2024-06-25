@@ -36,6 +36,10 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
+    owner: {
+        type: String,
+        required: true
+    },
 });
 
 productSchema.plugin(mongoosePaginate)

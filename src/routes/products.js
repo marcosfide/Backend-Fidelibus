@@ -6,12 +6,12 @@ class ProductsRouter extends Router {
     init() {
 
         const withController = callback => {
-            return (req, res, next) => { // Añadido 'next' aquí
+            return (req, res, next) => {
                 const service = new ProductsService(
                     req.app.get('productsStorage')
                 );
                 const controller = new ProductController(service);
-                return callback(controller, req, res, next); // Añadido 'next' aquí
+                return callback(controller, req, res, next); 
             };
         };
         

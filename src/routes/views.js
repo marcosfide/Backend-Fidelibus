@@ -35,6 +35,9 @@ class ViewRouter extends Router {
         this.get('/login', userIsNotLoggedId, withController((controller, req, res) => controller.getLogin(req, res)));
 
         // Ruta para resetear password
+        this.get('/emailToSendResetPassword', userIsNotLoggedId, withController((controller, req, res) => controller.getEmailToSendResetPassword(req, res)));
+
+        // Ruta para resetear password
         this.get('/resetPassword', userIsNotLoggedId, withController((controller, req, res) => controller.getResetPassword(req, res)));
 
         // Ruta para register
@@ -54,7 +57,7 @@ class ViewRouter extends Router {
 
 
         // Ruta para acceder al form de datos del producto a agregar
-        this.get('/productsManager', userIsAdmin, withController((controller, req, res) => controller.getProductsManager(req, res)));
+        this.get('/productsManager', withController((controller, req, res) => controller.getProductsManager(req, res)));
 
     }
 }

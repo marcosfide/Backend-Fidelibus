@@ -1,11 +1,20 @@
-<div>
+<div style="display: flex;justify-content: space-around; font-weight: 600; margin: 1.2rem; background-color: #8080808f; padding: 1rem">
     <a href="/">Inicio</a>
     <a href="/profile">My Profile</a>
     <a href="/products">Products</a>
+    
     {{#if isNotAdmin}}
     <a href="/cart">Cart</a>
+    {{#if isPremium}}
+    <a href="/productsManager">My Products</a>
     {{/if}}
-    <a href="/api/session/logout">Logout</a>
+    {{/if}}
+    
+    {{#if isAdmin}}
+    <a href="/productsManager">Product Manager</a>
+    {{/if}}
+
+    <a href="/api/session/logout" style="color: #ff3232;">Logout</a>
 </div>
 <h1>Bienvenido {{firstName}} {{lastName}}! {{email}} Rol: {{rol}}</h1>
 <h2>{{ title }}</h2>

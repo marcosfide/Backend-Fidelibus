@@ -106,6 +106,9 @@ class CartController {
             if (!product) {
                 throw new Error('Producto no encontrado.');
             }
+            if(product.owner === req.session.user.email){
+                throw new Error('No puedes agregar al carrito un producto que te pertenece');
+            }
 
             // Verificar si el producto ya está en el carrito
             const existingProduct = cart.products.find(item => item.product && item.product._id.toString() === productId);
