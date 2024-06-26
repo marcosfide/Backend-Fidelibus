@@ -24,7 +24,7 @@
     <div>Edad: {{user.age}}</div>
     <div>Email: {{user.email}}</div>
     {{#if isNotAdmin}}
-    <form action="/api/users/changeRol/{{user.id}}" method="POST" style="display: inline;">
+    <form action="/api/users/premium/{{user.id}}" method="POST" style="display: inline;">
         <button type="submit">Cambiar rol</button>
     </form>
     {{/if}}
