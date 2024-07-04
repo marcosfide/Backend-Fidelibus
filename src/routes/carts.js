@@ -21,7 +21,7 @@ class CartsRouter extends Router {
         }
         
         // Ruta para obtener los carritos
-        this.get('/', userIsNotAdmin, withController((controller, req, res) => controller.getCarts(req, res)));
+        this.get('/', withController((controller, req, res) => controller.getCarts(req, res)));
 
         // Ruta para obtener los productos del carrito por id
         this.get('/:cid', userIsNotAdmin, withController((controller, req, res) => controller.getCartById(req, res)));

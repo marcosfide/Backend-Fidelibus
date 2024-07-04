@@ -14,6 +14,7 @@ class ProductsStorage {
 
     async getById(id){
         const product = await ProductModel.findById(id)
+        console.log(product);
         if(!product){
             throw new Error('not found')
         }

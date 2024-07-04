@@ -21,7 +21,7 @@ class UserRouter extends Router {
         
         this.post('/resetPassword', withController((controller, req, res) => controller.resetPassword(req, res)));
 
-        this.get('/sendEmailToResetPassword', withController((controller, req, res) => controller.sendEmailToResetPassword(req, res)));
+        this.post('/sendEmailToResetPassword', withController((controller, req, res) => controller.sendEmailToResetPassword(req, res)));
 
         this.post('/premium/:uid', userIsNotAdmin, withController((controller, req, res) => controller.changeRol(req, res)));
         

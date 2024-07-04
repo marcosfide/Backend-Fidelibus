@@ -1,0 +1,352 @@
+openapi: 3.0.1
+info:
+  title: Ecommerce Fidelibus
+  version: "1.0.0"
+  description: API para la gestión de carritos de compra.
+
+paths:
+  /api/carts/:
+    get:
+      summary: Obtener todos los carritos
+      tags:
+        - Carts
+      description: Obtiene una lista de todos los carritos.
+      operationId: getCarts
+      responses:
+        '200':
+          description: Lista de carritos obtenida correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error al obtener los carritos.
+    post:
+      summary: Crear un nuevo carrito
+      tags:
+        - Carts
+      description: Crea un nuevo carrito con una lista vacía de productos.
+      operationId: addCart
+      responses:
+        '201':
+          description: Carrito creado correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Se ha creado un nuevo carrito
+        '500':
+          description: Error al crear el carrito.
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtener carrito por ID
+      tags:
+        - Carts
+      description: Obtiene un carrito por su ID.
+      operationId: getCartById
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+      responses:
+        '200':
+          description: Carrito obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Carrito no encontrado.
+        '400':
+          description: Parámetros inválidos.
+
+    delete:
+      summary: Eliminar todos los productos de un carrito
+      tags:
+        - Carts
+      description: Elimina todos los productos de un carrito.
+      operationId: clearCart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+      responses:
+        '200':
+          description: Productos eliminados del carrito correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Productos eliminados del carrito.
+        '404':
+          description: Carrito no encontrado.
+        '500':
+          description: Error al eliminar los productos del carrito.
+
+    put:
+      summary: Actualizar productos de un carrito
+      tags:
+        - Carts
+      description: Actualiza la lista de productos de un carrito por su ID.
+      operationId: updateCartProducts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+      requestBody:
+        description: Lista de productos actualizada
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductInCart'
+      responses:
+        '200':
+          description: Carrito actualizado correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Carrito actualizado correctamente.
+        '404':
+          description: Carrito no encontrado.
+        '500':
+          description: Error al actualizar el carrito.
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agregar producto al carrito
+      tags:
+        - Carts
+      description: Agrega un producto al carrito seleccionado por ID.
+      operationId: addProductToCart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
+      responses:
+        '200':
+          description: Producto agregado al carrito correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Producto agregado al carrito correctamente.
+        '404':
+          description: Carrito o producto no encontrado.
+        '500':
+          description: Error al agregar el producto al carrito.
+
+    delete:
+      summary: Eliminar producto del carrito
+      tags:
+        - Carts
+      description: Elimina un producto del carrito seleccionado por ID.
+      operationId: deleteProductFromCart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
+      responses:
+        '200':
+          description: Producto eliminado del carrito correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Producto eliminado del carrito.
+        '404':
+          description: Carrito o producto no encontrado.
+        '500':
+          description: Error al eliminar el producto del carrito.
+
+    put:
+      summary: Actualizar cantidad de producto en el carrito
+      tags:
+        - Carts
+      description: Actualiza la cantidad de un producto en el carrito.
+      operationId: updateQuantityCartProduct
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
+      requestBody:
+        description: Cantidad de producto actualizada
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: number
+                  example: 2
+      responses:
+        '200':
+          description: Cantidad de producto actualizada correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Carrito actualizado correctamente.
+        '404':
+          description: Carrito o producto no encontrado.
+        '500':
+          description: Error al actualizar la cantidad del producto en el carrito.
+
+  /api/carts/product/{pid}:
+    post:
+      summary: Agregar producto al carrito del usuario
+      tags:
+        - Carts
+      description: Agrega un producto al carrito del usuario logueado.
+      operationId: addProductToCartView
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
+      requestBody:
+        description: Cantidad de producto a agregar
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: number
+                  example: 2
+      responses:
+        '302':
+          description: Redirección al carrito.
+        '404':
+          description: Carrito o producto no encontrado.
+        '400':
+          description: No puedes agregar tu propio producto al carrito.
+        '500':
+          description: Error al agregar el producto al carrito.
+
+    delete:
+      summary: Eliminar producto del carrito del usuario
+      tags:
+        - Carts
+      description: Elimina un producto del carrito del usuario logueado.
+      operationId: deleteProductFromCartView
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
+      responses:
+        '302':
+          description: Redirección al carrito.
+        '404':
+          description: Carrito o producto no encontrado.
+        '500':
+          description: Error al eliminar el producto del carrito.
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 60c72b2f9b1e8b3d4c8a9e5f
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInCart'
+
+    ProductInCart:
+      type: object
+      properties:
+        product:
+          type: string
+          description: ID del producto
+          example: 60c72b2f9b1e8b3d4c8a9e5e
+        quantity:
+          type: number
+          example: 1

@@ -44,7 +44,6 @@ class UsersService {
     }
 
     async sendEmailToResetPassword(email) {
-        await this.storage.getByEmail(email);
 
         const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
@@ -59,7 +58,7 @@ class UsersService {
                     <a href="${resetLink}">Restablecer contraseña</a>
                 </div>
             `,
-            subject: 'Prueba de resetPassword'
+            subject: 'Reestablecer la contraseña'
         });
     }
 

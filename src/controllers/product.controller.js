@@ -110,12 +110,20 @@ class ProductController {
 
     async addProduct(req, res, next) {
         try {
+            const ownerEmail = req.session?.user?.email || 'Admin';
+            console.log('owner', ownerEmail);
             const product = {
                 ...req.body,
-                owner: req.session.user.email ? req.session.user.email : 'Admin'
+                owner: ownerEmail
             };
             await this.service.createOne(product);
-            res.redirect(302, '/productsManager'); 
+            if (req.session?.user) {
+                // Si hay una sesión activa, redirigir
+                res.redirect(302, '/productsManager');
+            } else {
+                // Si no hay sesión activa, devolver una respuesta JSON
+                res.status(201).json({ success: true, message: 'Producto agregado correctamente' });
+            }
         } catch (err) {
             next(err);
         }
@@ -125,7 +133,6 @@ class ProductController {
         try {
             const productId = req.params.pid
             const product = await this.service.getById(productId);
-            
             if (!product) {
                 res.status(400).json({ error: 'Producto no encontrado.' })
                 return;
@@ -133,12 +140,27 @@ class ProductController {
 
             await this.service.deleteById(productId)
             
-            res.redirect('/productsManager');
+            if (req.session?.user) {
+                // Si hay una sesión activa, redirigir
+                res.redirect(302, '/productsManager');
+            } else {
+                // Si no hay sesión activa, devolver una respuesta JSON
+                res.status(201).json({ success: true, message: 'Producto eliminado correctamente' });
+            }
         } catch (error) {
-            return this.#handleError(res, err)
+            return this.#handleError(res, error)
         }
     }
     
+    async updateProduct(req, res, next) {
+        try {
+            const product = { ...req.body, _id: req.params.pid };
+            const updatedProduct = await this.service.updateOne(product);
+            res.status(200).json({ success: true, message: 'Producto actualizado correctamente', data: updatedProduct });
+        } catch (error) {
+            next(error); // Pasar el error al middleware de manejo de errores
+        }
+    }
 }
 
 

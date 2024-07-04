@@ -62,10 +62,12 @@ class ProductsService {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('invalid params');
         }
+        console.log('id',id);
         return this.storage.getById(id);
     }
 
     async deleteById(id){
+        console.log('15435135');
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('invalid params');
         }
@@ -73,8 +75,6 @@ class ProductsService {
     }
 
     async createOne(product){
-        console.log('Datos recibidos:', product);
-
         let { title, description, code, price, status, stock, category, thumbnail } = product;
 
         if(!title || title === '' || !description || description === '' || !code || code === '' || !price || price === '' || !stock || stock === '' || !category || category === '' || !thumbnail || thumbnail === ''){
@@ -102,6 +102,14 @@ class ProductsService {
 
         return this.storage.createOne(product)
     }
+
+    async updateOne(product) {
+        try {
+            return await this.storage.updateOne(product);
+        } catch (error) {
+            throw error;
+        }
+    }     
 
     async getStockById(id){
         if (!mongoose.Types.ObjectId.isValid(id)) {

@@ -1,0 +1,232 @@
+openapi: 3.0.1
+info:
+  title: Ecommerce Fidelibus
+  description: API documentation for Ecommerce Fidelibus
+  version: "1.0.0"
+paths:
+  /api/products/:
+    get:
+      summary: Devuelve un listado de productos
+      tags:
+        - Products
+      parameters:
+        - name: limit
+          in: query
+          description: Número de productos por página
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Número de la página
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Ordenar los productos por precio
+          required: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filtrar productos por categoría
+          required: false
+          schema:
+            type: string
+        - name: availability
+          in: query
+          description: Filtrar productos por disponibilidad de stock ('s' para disponibles, 'n' para no disponibles)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of products.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  totalPages:
+                    type: number
+                    example: 4
+                  prevPage:
+                    type: number
+                    example: 2
+                  nextPage:
+                    type: number
+                    example: 4
+                  page:
+                    type: number
+                    example: 3
+                  hasPrevPage:
+                    type: boolean
+                    example: true
+                  hasNextPage:
+                    type: boolean
+                    example: true
+                  prevLink:
+                    type: string
+                    example: "http://localhost:8080/api/products?page=2"
+                  nextLink:
+                    type: string
+                    example: "http://localhost:8080/api/products?page=4"
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+    post:
+      summary: Agrega un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        description: Datos del nuevo producto
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Producto agregado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Producto agregado correctamente
+        '400':
+          description: Datos inválidos
+        '500':
+          description: Error interno del servidor
+  /api/products/{pid}:
+    get:
+      summary: Devuelve un producto por su ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto a consultar
+      responses:
+        '200':
+          description: Detalles del producto encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado.
+        '500':
+          description: Error interno del servidor.
+    put:
+      summary: Actualiza un producto existente
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto a actualizar
+      requestBody:
+        description: Datos del producto actualizados
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Datos inválidos
+        '404':
+          description: Producto no encontrado.
+        '500':
+          description: Error interno del servidor.
+    delete:
+      summary: Elimina un producto por su ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto a eliminar
+      responses:
+        '200':
+          description: Producto eliminado correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Producto eliminado correctamente
+        '404':
+          description: Producto no encontrado.
+        '500':
+          description: Error interno del servidor.
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "667b5bc7e57842a635974fc6"
+        title:
+          type: string
+          example: "Producto"
+        description:
+          type: string
+          example: "tester5"
+        code:
+          type: string
+          example: "22rrt5"
+        price:
+          type: number
+          example: 100
+        status:
+          type: boolean
+          example: false
+        stock:
+          type: number
+          example: 20
+        category:
+          type: string
+          example: "premiu"
+        thumbnail:
+          type: string
+          example: "prmi"
+        owner:
+          type: string
+          example: "tester5@gmail.com"
+        __v:
+          type: number
+          example: 0
