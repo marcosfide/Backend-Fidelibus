@@ -338,15 +338,10 @@ components:
         products:
           type: array
           items:
-            $ref: '#/components/schemas/ProductInCart'
-
-    ProductInCart:
-      type: object
-      properties:
-        product:
-          type: string
-          description: ID del producto
-          example: 60c72b2f9b1e8b3d4c8a9e5e
-        quantity:
-          type: number
-          example: 1
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/Product'
+              quantity:
+                type: integer
+                example: 2
