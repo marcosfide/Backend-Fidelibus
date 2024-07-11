@@ -296,6 +296,7 @@ class ViewController {
             const user = await this.userService.getById(req.session.user._id)
             const cartId = user.cart;
             const cart = await this.cartService.getById(cartId)
+            console.log(cartId);
             if (!cart) {
                 res.status(400).json({ error: 'cart no encontrado.' });
                 return;

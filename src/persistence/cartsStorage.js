@@ -54,7 +54,6 @@ class CartsStorage {
     }
 
     async updateOne(cart){
-        console.log(cart);
         const { _id, ...updateData } = cart;
         const updatedCart = await CartModel.findByIdAndUpdate(_id, updateData, { new: true, runValidators: true });
         if (!updatedCart) {

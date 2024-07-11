@@ -1,22 +1,25 @@
-const UserModel = require('../dao/models/user.model');
+const mongoose = require('mongoose');
 
-class SesionsStorage {
+const SessionModel = require('../dao/models/session.model');
 
-    constructor(){}
+class SessionsStorage {
 
-    async createSession(req, userSession){
-        // crear nueva session
+    constructor() {}
+
+    async createSession(req, userSession) {
+        // Crear nueva sesión en req.session
         req.session.user = userSession;
-    }
 
-    async getById(id){
-        const user = await UserModel.findOne({ _id: id })
-        if(!user){
-            throw new Error('not found')
-        }
-        return user
-    }
+        // Crear nueva sesión en MongoDB
+        const sessionData = {
+            _id: new mongoose.Types.ObjectId().toString(),
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // Expira en 24 horas
+            session: JSON.stringify(req.session)
+        };
 
+        const session = new SessionModel(sessionData);
+        await session.save();
+    }
 }
 
-module.exports = SesionsStorage
+module.exports = SessionsStorage;
