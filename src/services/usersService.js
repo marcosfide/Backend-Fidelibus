@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const transport = require('../nodemailer-config/transport');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const uploader = require('../middlewares/uploadFile')
 
 class UsersService {
 
@@ -92,6 +93,12 @@ class UsersService {
         } catch (error) {
             console.error('Error updating user role:', error);
         }
+    }
+
+    async addImage(userId, file) {
+        console.log('User ID:', userId);
+        console.log('Uploaded File:', file);
+        // Aquí puedes agregar la lógica para guardar la información del archivo en la base de datos, si es necesario.
     }
 }
 

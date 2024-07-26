@@ -3,6 +3,7 @@ const passport = require('passport');
 const UserController = require('../controllers/user.controller');
 const { UsersService }= require('../services/usersService')
 const {userIsNotAdmin} = require('../middlewares/auth.middleware')
+const uploader = require('../middlewares/uploadFile');
 
 class UserRouter extends Router {
     init() {
@@ -24,6 +25,8 @@ class UserRouter extends Router {
         this.post('/sendEmailToResetPassword', withController((controller, req, res) => controller.sendEmailToResetPassword(req, res)));
 
         this.post('/premium/:uid', userIsNotAdmin, withController((controller, req, res) => controller.changeRol(req, res)));
+
+        this.post('/:uid/documents', uploader.single('image'), withController((controller, req, res) => controller.addImage(req, res)));
         
     }
 }

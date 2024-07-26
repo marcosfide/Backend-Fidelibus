@@ -16,6 +16,20 @@ const schema = new mongoose.Schema({
     cart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Cart'
+    },
+    documents: [{
+        name: {
+            type: String,
+            required: true
+        },
+        reference: {
+            type: String,
+            required: true
+        }
+    }],
+    last_connection: {
+        type: Date,
+        default: Date.now
     }
 })
 

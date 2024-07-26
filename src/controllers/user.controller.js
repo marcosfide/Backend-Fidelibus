@@ -73,10 +73,24 @@ class UserController {
     async changeRol(req, res){
         try {
             const userId = req.params.uid
+            console.log('body',req.body);
+            console.log('file,',req.file);
             await this.service.changeRol(userId)
             res.redirect('/profile')
         } catch (error) {
             console.log(res);
+        }
+    }
+
+    async addImage(req, res) {
+        try {
+            const userId = req.params.uid;
+            const file = req.file;
+            await this.service.addImage(userId, file);
+            res.status(200).send({ message: 'Imagen cargada exitosamente' });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ error: 'Error al cargar la imagen' });
         }
     }
     
