@@ -121,7 +121,8 @@ class ViewController {
                     age: user.age,
                     email: user.email,
                     rol: user.rol,
-                    id: user.id
+                    id: user._id,
+                    documents: user.documents || []
                 },
                 isAdmin,
                 isNotAdmin: !isAdmin,

@@ -96,10 +96,29 @@ class UsersService {
     }
 
     async addImage(userId, file) {
-        console.log('User ID:', userId);
-        console.log('Uploaded File:', file);
-        // Aquí puedes agregar la lógica para guardar la información del archivo en la base de datos, si es necesario.
-    }
+        try {
+            const user = await this.storage.getById(userId);
+            if (!user) {
+                throw new Error('Usuario no encontrado');
+            }
+    
+            if (!Array.isArray(user.documents)) {
+                user.documents = [];
+            }
+    
+            const newDocument = {
+                name: file.originalname,
+                reference: `/files/${file.filename}` // Ruta accesible
+            };
+    
+            user.documents.push(newDocument);
+            await this.storage.updateOne(userId, { documents: user.documents });
+        } catch (error) {
+            console.log(error);
+            throw new Error('Error al actualizar los documentos del usuario');
+        }
+    }    
+    
 }
 
 module.exports = { UsersService }

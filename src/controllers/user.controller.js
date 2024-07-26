@@ -87,13 +87,13 @@ class UserController {
             const userId = req.params.uid;
             const file = req.file;
             await this.service.addImage(userId, file);
-            res.status(200).send({ message: 'Imagen cargada exitosamente' });
+            res.redirect('/profile')
         } catch (error) {
             console.log(error);
             res.status(500).send({ error: 'Error al cargar la imagen' });
         }
     }
-    
+
 }
 
 

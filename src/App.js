@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const handlebars = require('express-handlebars').create({
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
@@ -78,6 +79,8 @@ app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use(useLogger);
+
+app.use('/files', express.static(path.join(__dirname, '../files')));
 
 initializeStrategy();
 initializeGithubStrategy();

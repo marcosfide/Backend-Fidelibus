@@ -10,7 +10,8 @@ class SessionRouter extends Router {
         const withController = callback => {
             return (req, res) => {
                 const service = new SessionsService(
-                    req.app.get('sessionsStorage')
+                    req.app.get('sessionsStorage'),
+                    req.app.get('usersStorage')
                 )
                 const cartsService = new CartsService(
                     req.app.get('cartsStorage')
