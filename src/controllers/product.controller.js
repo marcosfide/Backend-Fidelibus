@@ -64,8 +64,8 @@ class ProductController {
                 page: products.page,
                 hasPrevPage: products.hasPrevPage,
                 hasNextPage: products.hasNextPage,
-                prevLink: prevLink? `http://localhost:8080${prevLink}` : null,
-                nextLink: nextLink ? `http://localhost:8080${nextLink}` : null,
+                prevLink: prevLink? `${process.env.BASE_URL}${prevLink}` : null,
+                nextLink: nextLink ? `${process.env.BASE_URL}${nextLink}` : null,
             });
         } catch (error) {
             console.error('Error al obtener los productos:', error);
@@ -138,7 +138,7 @@ class ProductController {
                 return;
             }
 
-            await this.service.deleteById(productId)
+            await this.service.deleteById(productId, product.owner)
             
             if (req.session?.user) {
                 // Si hay una sesión activa, redirigir

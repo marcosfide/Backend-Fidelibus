@@ -1,8 +1,20 @@
 
 class UserController {
     
-    constructor(service){
-        this.service = service
+    constructor(userService,productService,cartService){
+        this.userService = userService
+        this.productService = productService
+        this.cartService = cartService
+    }
+
+    async getUsers(req, res){
+        try {
+            const userId = req.params.uid
+            const users = await this.userService.getUsers()
+            res.json(users)
+        } catch (error) {
+            console.log(res);
+        }
     }
 
     async register(req, res){
@@ -19,7 +31,7 @@ class UserController {
     
         try {
             await this.service.resetPassword(token, password);
-            const resetLink = 'http://localhost:8080/';
+            const resetLink = `${process.env.BASE_URL}`;
             res.send(`
                 <html>
                 <head>
@@ -59,7 +71,7 @@ class UserController {
         const { email } = req.body;
     
         try {
-            await this.service.sendEmailToResetPassword(email);
+            await this.userService.sendEmailToResetPassword(email);
             res.send('Se ha enviado un mail para reestablecer la contraseña');
         } catch (error) {
             if (error.message === 'not found') {
@@ -73,9 +85,7 @@ class UserController {
     async changeRol(req, res){
         try {
             const userId = req.params.uid
-            console.log('body',req.body);
-            console.log('file,',req.file);
-            await this.service.changeRol(userId)
+            await this.userService.changeRol(userId)
             res.redirect('/profile')
         } catch (error) {
             console.log(res);
@@ -86,7 +96,7 @@ class UserController {
         try {
             const userId = req.params.uid;
             const file = req.file;
-            await this.service.addImage(userId, file);
+            await this.userService.addImage(userId, file);
             res.redirect('/profile')
         } catch (error) {
             console.log(error);
@@ -94,6 +104,66 @@ class UserController {
         }
     }
 
+    async deleteInactiveUsers(req, res) {
+        try {
+            await this.userService.deleteInactiveUsers();
+            if (req.session?.user) {
+                // Si hay una sesión activa, redirigir
+                res.redirect(302, '/usersManager');
+            } else {
+                // Si no hay sesión activa, devolver una respuesta JSON
+                res.status(201).json({ success: true, message: 'Usuario eliminado correctamente' });
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ error: 'Error al eliminar usuarios inactivos' });
+        }
+    }
+
+    async deleteUserById(req, res) {
+        try {
+            const userId = req.params.uid;
+            const user = await this.userService.getById(userId);
+    
+            if (!user) {
+                res.status(400).json({ error: 'Usuario no encontrado.' });
+                return;
+            }
+    
+            const email = user.email;
+            const cartId = user.cart;
+    
+            // Limpiar el carrito si tiene productos y luego eliminar el carrito
+            if (cartId) {
+                await this.cartService.deleteById(cartId)
+            }
+    
+            // Obtener todos los productos del usuario
+            const userProducts = await this.productService.getByOwner(email);
+    
+            // Iterar sobre los productos del usuario y eliminarlos
+            for (const product of userProducts) {
+                await this.productService.deleteById(product._id,email);
+            }
+    
+            // Eliminar el usuario
+            await this.userService.deleteById(userId);
+    
+            // Enviar correo al usuario eliminado
+            await this.userService.sendEmailToUserDeleted(email);
+    
+            if (req.session?.user) {
+                // Si hay una sesión activa, redirigir
+                res.redirect(302, '/usersManager');
+            } else {
+                // Si no hay sesión activa, devolver una respuesta JSON
+                res.status(201).json({ success: true, message: 'Usuario eliminado correctamente' });
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ error: 'Error al eliminar el usuario' });
+        }
+    }
 }
 
 

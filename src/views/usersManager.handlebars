@@ -1,0 +1,50 @@
+<div style="display: flex;justify-content: space-around; font-weight: 600; margin: 1.2rem; background-color: #8080808f; padding: 1rem">
+    <a href="/">Inicio</a>
+    <a href="/profile">My Profile</a>
+    <a href="/products">Products</a>
+    <a href="/cart">Cart</a>
+    <a href="/productsManager">Products Manager</a>
+    <a href="/usersManager">Users Manager</a>
+
+    <a href="/api/session/logout" style="color: #ff3232;">Logout</a>
+</div>
+<div class="products-list">
+    <h1>Listado de usuarios</h1>
+    <div class="card-product">
+        <table>
+            <thead>
+                <tr>
+                    <td>Nombre: </td>
+                    <td>Apellido:</td>
+                    <td>Email:</td>
+                    <td>Rol:</td>
+                    <td>Última conexión:</td>
+                </tr>
+            </thead>
+            <tbody class="container" id="productsFeed">
+                {{#each users}}
+                    <tr data-product-id="{{this._id}}">
+                        <td> {{this.firstName}}</td>
+                        <td> {{this.lastName}}</td>
+                        <td> {{this.email}}</td>
+                        <td> {{this.rol}}</td>
+                        <td> {{this.last_connection}}</td>
+                        <td>
+                            <form method="post" action="/api/users/{{this._id}}?_method=DELETE"  class="btn-eliminar">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <!-- Añadir el formulario para eliminar usuarios inactivos -->
+        <form method="post" action="/api/users?_method=DELETE">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" style="margin-top: 1rem;">Eliminar Usuarios Inactivos</button>
+        </form>
+    </div>
+</div>

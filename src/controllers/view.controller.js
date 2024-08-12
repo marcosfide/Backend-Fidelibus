@@ -271,8 +271,8 @@ class ViewController {
             res.render('products', {
                 title: 'Productos',
                 products: products.docs,
-                prevLink: prevLink ? `http://localhost:8080/products${prevLink}` : null,
-                nextLink: nextLink ? `http://localhost:8080/products${nextLink}` : null,
+                prevLink: prevLink ? `${process.env.BASE_URL}products${prevLink}` : null,
+                nextLink: nextLink ? `${process.env.BASE_URL}products${nextLink}` : null,
                 page: products.page,
                 totalPages: products.totalPages,
                 styles: [
@@ -359,8 +359,8 @@ class ViewController {
     
             res.render('managerProducts', { // Renderizamos el listado y form
                 products: products.docs,
-                prevLink: prevLink ? `http://localhost:8080/productsManager/${prevLink}` : null,
-                nextLink: nextLink ? `http://localhost:8080/productsManager/${nextLink}` : null,
+                prevLink: prevLink ? `${process.env.BASE_URL}productsManager/${prevLink}` : null,
+                nextLink: nextLink ? `${process.env.BASE_URL}productsManager/${nextLink}` : null,
                 page: products.page,
                 totalPages: products.totalPages,
                 styles: [
@@ -373,6 +373,33 @@ class ViewController {
             });
         } catch (error) {
             console.error("Error al obtener productos:", error);
+            res.status(500).send("Error interno del servidor");
+        }
+    }
+
+    async getUsersManager(req, res, next) {
+        try {
+            const users = await this.userService.getUsers();
+    
+            const baseUrl = req.baseUrl;
+            const queryParams = req.query;
+            // Obtener los enlaces previo y siguiente
+            const prevLink = await this.buildPrevLink(baseUrl, queryParams, users.page);
+            const nextLink = await this.buildNextLink(baseUrl, queryParams, users.page, users.totalPages);
+    
+            res.render('usersManager', {
+                users: users,
+                prevLink: prevLink ? `${process.env.BASE_URL}usersManager/${prevLink}` : null,
+                nextLink: nextLink ? `${process.env.BASE_URL}usersManager/${nextLink}` : null,
+                page: users.page,
+                totalPages: users.totalPages,
+                styles: [
+                    'product.css'
+                ],
+                title: 'User Manager',
+            });
+        } catch (error) {
+            console.error("Error al obtener useros:", error);
             res.status(500).send("Error interno del servidor");
         }
     }

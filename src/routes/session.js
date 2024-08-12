@@ -35,11 +35,14 @@ class SessionRouter extends Router {
         
         this.get('/github', passport.authenticate('github', {scope: ['user:email']}), (req, res) => {})
         
-        this.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/'}), (req,res) => {
-            req.session.user = {_id: req.user._id}
-            res.redirect('/')
-        })
-                
+        this.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/'}), (req, res) => {
+            req.session.user = {
+                _id: req.user._id,
+                email: req.user.email
+            };
+            res.redirect('/');
+        });
+          
         this.get('/current', withController((controller, req, res) => controller.getCurrent(req, res)));
     }
 }

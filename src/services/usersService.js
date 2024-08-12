@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 const transport = require('../nodemailer-config/transport');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const uploader = require('../middlewares/uploadFile')
+const { isValid, format } = require('date-fns');
 
 class UsersService {
 
-    constructor(storage){
+    constructor(storage,productStorage,cartStorage){
         this.storage = storage
+        this.productStorage = productStorage
+        this.cartStorage = cartStorage
     }
 
     async resetPassword(token, password) {
@@ -33,6 +35,26 @@ class UsersService {
         }
     }
 
+    async getUsers() {
+        const users = await this.storage.getUsers();
+    
+        const formattedUsers = users.map(user => {
+            // Imprimir el valor de last_connection para depuración
+            console.log('last_connection value:', user._doc.last_connection);
+    
+            // Verifica si el campo last_connection es válido
+            const lastConnectionDate = new Date(user._doc.last_connection);
+            const isValidDate = isValid(lastConnectionDate);
+    
+            return {
+                ...user._doc,
+                last_connection: isValidDate ? format(lastConnectionDate, 'HH:mm dd/MM/yyyy') : 'No disponible'
+            };
+        });
+    
+        return formattedUsers;
+    }
+
     async getById(id) {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('invalid params');
@@ -48,7 +70,7 @@ class UsersService {
 
         const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
-        const resetLink = `http://localhost:8080/resetPassword?token=${token}`;
+        const resetLink = `${process.env.BASE_URL}resetPassword?token=${token}`;
         
         return await transport.sendMail({
             from: 'Marcos',
@@ -60,6 +82,20 @@ class UsersService {
                 </div>
             `,
             subject: 'Reestablecer la contraseña'
+        });
+    }
+
+    async sendEmailToUserDeleted(email) {
+        
+        return await transport.sendMail({
+            from: 'Marcos',
+            to: email,
+            html: `
+                <div>
+                    <p>Su usuario ha sido eliminado del ecommerce.</p>
+                </div>
+            `,
+            subject: 'Usuario eliminado'
         });
     }
 
@@ -117,7 +153,47 @@ class UsersService {
             console.log(error);
             throw new Error('Error al actualizar los documentos del usuario');
         }
+    }
+
+    async deleteInactiveUsers() {
+        // Obtener usuarios inactivos (sin conexión en más de dos días)
+        const twoDaysAgo = new Date();
+        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+        
+        // Encuentra todos los usuarios inactivos
+        const usersToDelete = await this.storage.getInactiveUsers(twoDaysAgo);
+    
+        for (const user of usersToDelete) {
+            const email = user.email;
+            const cartId = user.cart;
+            
+            // Eliminar el carrito del usuario si existe
+            if (cartId) {
+                await this.cartStorage.deleteById(cartId);
+            }
+    
+            // Obtener y eliminar todos los productos del usuario
+            const userProducts = await this.productStorage.getByOwner(email);
+            for (const product of userProducts) {
+                await this.productStorage.deleteById(product._id);
+            }
+    
+            // Eliminar el usuario
+            await this.storage.deleteById(user._id);
+    
+            // Enviar correo al usuario eliminado
+            await this.sendEmailToUserDeleted(email);
+        }
+    
+        return { deletedCount: usersToDelete.length };
     }    
+
+    async deleteById(id){
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new Error('invalid params');
+        }
+        return this.storage.deleteById(id)
+    }
     
 }
 

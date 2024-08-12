@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { CustomError } = require('./errors/CustomError');
 const { ErrorCodes } = require('./errors/errorCodes');
 const { generateInvalidProductDataError } = require('./products.error');
+const transport = require('../nodemailer-config/transport');
 
 class ProductsService {
 
@@ -62,16 +63,36 @@ class ProductsService {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('invalid params');
         }
-        console.log('id',id);
         return this.storage.getById(id);
     }
 
-    async deleteById(id){
-        console.log('15435135');
+    async getByOwner(owner) {
+        const productsOwner = await this.storage.getByOwner(owner)
+        return productsOwner
+    }
+
+    async sendEmailForProductDeleted(product, email) {
+        
+        return await transport.sendMail({
+            from: 'Marcos',
+            to: email,
+            html: `
+                <div>
+                    <p>Su prducto ${product.title}, código ${product.code} ha sido eliminado del ecommerce.</p>
+                </div>
+            `,
+            subject: 'Producto eliminado'
+        });
+    }
+
+    async deleteById(id, owner){
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('invalid params');
         }
-        return this.storage.deleteById(id)
+        const product = await this.getById(id)
+        await this.storage.deleteById(id)
+        await this.sendEmailForProductDeleted(product,owner)
+        return
     }
 
     async createOne(product){

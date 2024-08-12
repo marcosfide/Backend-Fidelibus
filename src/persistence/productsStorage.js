@@ -20,6 +20,11 @@ class ProductsStorage {
         return product
     }
 
+    async getByOwner(owner){
+        const products = await ProductModel.find({ owner: owner })
+        return products
+    }
+
     async createOne(product){
         return await ProductModel.create(product)
     }

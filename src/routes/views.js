@@ -55,9 +55,11 @@ class ViewRouter extends Router {
         // Ruta para obtener cart por id
         this.get('/cart', userIsLoggedIn, userIsNotAdmin, withController((controller, req, res) => controller.getCartById(req, res)));
 
-
         // Ruta para acceder al form de datos del producto a agregar
         this.get('/productsManager', withController((controller, req, res) => controller.getProductsManager(req, res)));
+
+        // Ruta para acceder al form de datos del producto a agregar
+        this.get('/usersManager', userIsAdmin, withController((controller, req, res) => controller.getUsersManager(req, res)));
 
     }
 }
