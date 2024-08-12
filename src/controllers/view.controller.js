@@ -3,11 +3,12 @@ const { emailAdmin, emailSuperAdmin } = require ('../env-config/adminConfig');
 
 class ViewController {
     
-    constructor(productService, cartService, sessionService, userService){
+    constructor(productService, cartService, sessionService, userService, ticketService){
         this.productService = productService
         this.cartService = cartService
         this.sessionService = sessionService
         this.userService = userService
+        this.ticketService = ticketService
     }
 
     async getHome(req, res) {
@@ -403,7 +404,44 @@ class ViewController {
             res.status(500).send("Error interno del servidor");
         }
     }
-    
+
+    // Método para obtener un ticket por ID y renderizar la vista
+    async getTicketById(req, res) {
+        try {
+            const ticketId = req.params.tid;
+            const ticket = await this.ticketService.getById(ticketId);
+            
+            if (!ticket) {
+                return res.status(404).send('Ticket no encontrado');
+            }
+
+            // Verificar el usuario autenticado
+            const isLoggedIn = req.session.user !== undefined && req.session.user !== null;
+            let isAdmin = false;
+            let user = null;
+
+            if (isLoggedIn) {
+                if (req.session.user.email) {
+                    isAdmin = req.session.user.email === emailAdmin || req.session.user.email === emailSuperAdmin;
+                    if (!isAdmin) {
+                        user = await this.userService.getByEmail(req.session.user.email);
+                    }
+                }
+            }
+
+            res.render('ticket', {
+                title: 'Ticket',
+                ticket: ticket,
+                isLoggedIn,
+                isNotLoggedIn: !isLoggedIn,
+                styles: ['ticket.css']
+            });
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error interno del servidor');
+        }
+    }
 }
 
 

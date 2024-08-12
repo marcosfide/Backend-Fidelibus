@@ -1,0 +1,34 @@
+<div>
+    <h1>Detalles del Ticket</h1>
+    <div>
+        <p><strong>ID:</strong> {{ticket._id}}</p>
+        <p><strong>Código:</strong> {{ticket.code}}</p>
+        <p><strong>Comprador:</strong> {{ticket.purchaser}}</p>
+        <p><strong>Fecha:</strong> {{ticket.purchase_datatime}}</p>
+        
+        <h4>Productos</h4>
+        <table border="1" cellspacing="1" cellpadding="2" style="font-size: small">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio por unidad</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each ticket.products}}
+                <tr>
+                    <td>{{productName}}</td>
+                    <td>{{productQuantity}}</td>
+                    <td>${{productPrice}}</td>
+                    <td>${{productTotalAmount}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        
+        <p><strong>Total del Ticket:</strong> ${{ticket.amount}}</p>
+        <p><strong>Observaciones:</strong> {{ticket.observations}}</p>
+    </div>
+</div>

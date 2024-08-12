@@ -5,6 +5,7 @@ const { ProductsService } = require('../services/productsService')
 const { CartsService } = require('../services/cartsService')
 const { SessionsService }= require('../services/sessionsService')
 const { UsersService }= require('../services/usersService')
+const { TicketsService }= require('../services/ticketsService')
 
 class ViewRouter extends Router {
     init() {
@@ -23,7 +24,10 @@ class ViewRouter extends Router {
                 const userService = new UsersService(
                     req.app.get('usersStorage')
                 )
-                const controller = new ViewController(productService, cartService, sessionService, userService)
+                const ticketService = new TicketsService(
+                    req.app.get('ticketsStorage')
+                )
+                const controller = new ViewController(productService, cartService, sessionService, userService, ticketService)
                 return callback(controller, req, res)
             }
         }
@@ -61,6 +65,8 @@ class ViewRouter extends Router {
         // Ruta para acceder al form de datos del producto a agregar
         this.get('/usersManager', userIsAdmin, withController((controller, req, res) => controller.getUsersManager(req, res)));
 
+        // Nueva ruta para obtener un ticket por ID
+        this.get('/ticket/:tid', userIsLoggedIn, withController((controller, req, res) => controller.getTicketById(req, res)));
     }
 }
 

@@ -44,7 +44,7 @@ class TicketController {
                     cartUpdated.push(cartItem)
                 }
                 if (cartItem.quantity > stock) {
-                    productsOutOfStock.push(cartItem.product)
+                    productsOutOfStock.push(cartItem.product.title)
                     console.log(`El producto ${cartItem.product.title} no ha sido incluido en su compra debido a que no hay suficiente stock`)
                 }
             }
@@ -56,8 +56,6 @@ class TicketController {
 
             const totalCart = await this.cartService.getTotalCart(cartUpdated);
 
-            console.log('cart Updated', cartUpdated);
-
             const ticketProducts = cartUpdated.map(cartItem => ({
                 productId: cartItem.product._id,
                 productName: cartItem.product.title,
@@ -65,21 +63,20 @@ class TicketController {
                 productQuantity: cartItem.quantity,
                 productTotalAmount: cartItem.quantity * cartItem.product.price
             }));
-
-            console.log('ricketproductsss', ticketProducts);
     
             const ticketData = {
                 code: this.generateUniqueCode(),
                 purchase_datatime: new Date(),
                 products: ticketProducts,
                 amount: totalCart,
-                purchaser: user.email
+                purchaser: user.email,
+                observations: messageOutOfStock
             };
     
-            await this.ticketService.createOne(ticketData);
+            const ticket = await this.ticketService.createOne(ticketData);
             await this.cartService.clearCart(cartId)
 
-            res.status(201).json({ status: 'success', message: 'Se ha creado un nuevo ticket', ticketData, messageOutOfStock});
+            res.redirect(302, `/ticket/${ticket._id}`)
         } catch (error) {
             return this.#handleError(res, error);
         }

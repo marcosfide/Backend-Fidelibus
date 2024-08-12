@@ -28,11 +28,10 @@ class TicketsRouter extends Router {
         }
         
         // Ruta para obtener los tickets
-        this.get('/', withController((controller, req, res) => controller.getTickes(req, res)));
+        this.get('/', withController((controller, req, res) => controller.getTickets(req, res)));
 
         // Ruta para crear un nuevo ticket
         this.post('/:cid/purchase', withController((controller, req, res) => controller.createTicket(req, res)));
-
 
     }
 }

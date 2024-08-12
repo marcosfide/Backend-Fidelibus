@@ -23,6 +23,10 @@ const ticketSchema = new Schema({
     purchaser: {
         type: String, //email
         required: true
+    },
+    observations: {
+        type: String,
+        required: true
     }
 });
 
