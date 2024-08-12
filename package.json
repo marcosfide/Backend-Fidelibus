@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r dotenv/config src/App.js"
+    "local": "nodemon -r dotenv/config src/App.js",
+    "start": "node src/App.js",
+    "dev": "nodemon src/App.js"
   },
   "author": "Marcos Fidelibus",
   "license": "ISC",

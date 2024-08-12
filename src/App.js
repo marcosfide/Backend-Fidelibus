@@ -51,6 +51,8 @@ const { errorHandler } = require('./services/errors/errorHandler.js');
 
 const app = express();
 
+const PORT = process.env.PORT || 8080
+
 const swaggerOptions = {
     definition: {
         openapi: '3.0.1',
@@ -117,7 +119,7 @@ const main = async () => {
     app.set('usersStorage', new UsersStorage());
     app.set('ticketsStorage', new TicketsStorage());
 
-    const httpServer = app.listen(8080, () => {
+    const httpServer = app.listen(PORT, () => {
         console.log('Servidor listo');
     });
 
