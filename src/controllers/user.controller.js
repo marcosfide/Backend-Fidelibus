@@ -30,7 +30,7 @@ class UserController {
         }
     
         try {
-            await this.service.resetPassword(token, password);
+            await this.userService.resetPassword(token, password);
             const resetLink = `${process.env.BASE_URL}`;
             res.send(`
                 <html>
