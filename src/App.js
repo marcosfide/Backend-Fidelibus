@@ -105,8 +105,15 @@ app.use('/loggerTest', loggerTestRouter.getRouter());
 app.use(errorHandler);
 
 // Inicialización de la base de datos y del servidor
+// Inicialización de la base de datos y del servidor
 const main = async () => {
-    await mongoose.connect(mongoUrl, { dbName });
+    // Actualizamos la conexión a MongoDB Atlas
+    await mongoose.connect(mongoUrl, { 
+        dbName,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverApi: { version: '1', strict: true, deprecationErrors: true }
+    });
 
     const productManager = new ProductManager();
     const cartManager = new CartManager();
@@ -146,4 +153,4 @@ const main = async () => {
     });
 };
 
-main();
+main().catch(error => console.error('Error al conectar a MongoDB:', error));
