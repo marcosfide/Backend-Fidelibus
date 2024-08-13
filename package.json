@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "local": "nodemon -r dotenv/config src/App.js",
     "start": "node src/App.js",
+    "build": "NODE_ENV=production npm ci --omit=dev",
     "dev": "nodemon src/App.js"
   },
   "author": "Marcos Fidelibus",
