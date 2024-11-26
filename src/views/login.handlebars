@@ -1,12 +1,37 @@
-<div style="display: flex;justify-content: space-around; font-weight: 600; margin: 1.2rem; background-color: #8080808f; padding: 1rem">
-    <form action="/api/session/login" method="post" enctype="application/x-www-form-urlencoded">
-        <label for="_email">Email:</label>
-        <input type="email" name="email" id="_email" required="true">
+<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; background-color: #f4f4f4; padding: 2rem; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-radius: 8px; width: 100%; max-width: 400px; margin: 2rem auto;">
+    <style>
+        a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
 
-        <label for="_pass">Password:</label>
-        <input type="password" name="password" id="_pass" required="true">
+        a:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+            text-decoration: underline;
+        }
 
-        <button type="submit">Login</button>
+        a.logout:hover {
+            background-color: #e63939;
+            transform: scale(1.1);
+        }
+    </style>
+    <form action="/api/session/login" method="post" enctype="application/x-www-form-urlencoded" style="display: flex; flex-direction: column; gap: 1rem; width: 100%; padding: 1rem; background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+        <label for="_email" style="font-size: 1rem; color: #333;">Email:</label>
+        <input type="email" name="email" id="_email" required="true" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
+
+        <label for="_pass" style="font-size: 1rem; color: #333;">Password:</label>
+        <input type="password" name="password" id="_pass" required="true" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
+
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 12px 0; border: none; font-size: 1rem; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Login</button>
     </form>
-    <a href="/api/session/github">Entrar con Github</a>
+
+    <a href="/api/session/github" style="margin-top: 15px; color: #333; font-size: 1rem; text-decoration: none; text-align: center; border: 1px solid #ccc; padding: 10px 20px; border-radius: 5px; width: 100%; box-sizing: border-box; background-color: #f5f5f5; transition: background-color 0.3s;">
+        Entrar con Github
+    </a>
 </div>

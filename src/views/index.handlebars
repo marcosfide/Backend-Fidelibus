@@ -1,27 +1,88 @@
-<div style="display: flex;justify-content: space-around; font-weight: 600; margin: 1.2rem; background-color: #8080808f; padding: 1rem">
+<div style="display: flex; justify-content: center; align-items: center; font-weight: 600; background-color: #4CAF50; padding: 1rem; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <style>
+        a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        a:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+            text-decoration: underline;
+        }
+
+        a.logout:hover {
+            background-color: #e63939;
+            transform: scale(1.1);
+        }
+    </style>
     {{#if isNotLoggedIn}}
-    <a href="/login">Login</a>
-    <a href="/emailToSendResetPassword">Reset password</a>
-    <a href="/register">Register</a>
+    <a href="/login" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Login</a>
+    <a href="/emailToSendResetPassword" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Reset Password</a>
+    <a href="/register" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Register</a>
     {{/if}}
 
     {{#if isLoggedIn}}
-    <a href="/">Inicio</a>
-    <a href="/profile">My Profile</a>
-    <a href="/products">Products</a>
-    
+    <a href="/" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Inicio</a>
+    <a href="/profile" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">My Profile</a>
+    <a href="/products" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Products</a>
+
     {{#if isNotAdmin}}
-    <a href="/cart">Cart</a>
+    <a href="/cart" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Cart</a>
     {{#if isPremium}}
-    <a href="/productsManager">My Products</a>
+    <a href="/productsManager" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">My Products</a>
     {{/if}}
-    {{/if}}
-    
-    {{#if isAdmin}}
-    <a href="/productsManager">Product Manager</a>
-    <a href="/usersManager">Users Manager</a>
     {{/if}}
 
-    <a href="/api/session/logout" style="color: #ff3232;">Logout</a>
+    {{#if isAdmin}}
+    <a href="/productsManager" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Product Manager</a>
+    <a href="/usersManager" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Users Manager</a>
     {{/if}}
+
+    <a href="/api/session/logout" style="color: #ff3232; margin-left: 15px; font-size: 18px; text-decoration: none; padding: 8px 16px; border-radius: 5px;">Logout</a>
+    {{/if}}
+</div>
+
+<!-- Información sobre el proyecto -->
+<div style="padding: 2rem; text-align: center; background-color: #f4f4f9; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <h2 style="font-size: 2rem; color: #333;">Bienvenido a mi Proyecto de Backend - Simulador de Ecommerce</h2>
+    <p style="font-size: 1.2rem; color: #666; max-width: 800px; margin: 20px auto;">
+        Este proyecto fue desarrollado como parte del curso de Backend en Coderhouse. El objetivo principal es crear una aplicación que simule un ecommerce funcional, donde los usuarios pueden interactuar con productos, realizar compras y administrar su perfil.
+    </p>
+
+    <h3 style="font-size: 1.5rem; color: #333;">Tecnologías Utilizadas</h3>
+    <ul style="font-size: 1.1rem; color: #444; text-align: left; max-width: 800px; margin: 20px auto; list-style-type: none; padding-left: 0;">
+        <li><strong>Node.js</strong> - Entorno de ejecución de JavaScript para la creación del backend.</li>
+        <li><strong>Express.js</strong> - Framework minimalista para Node.js que facilita la creación de servidores web.</li>
+        <li><strong>MongoDB</strong> - Base de datos NoSQL usada para almacenar información de productos, usuarios y transacciones.</li>
+    </ul>
+
+    <h4 style="font-size: 1.3rem; color: #333;">Simulador de Ecommerce y Roles</h4>
+    <p style="font-size: 1rem; color: #666; max-width: 800px; margin: 20px auto;">
+        Este es un simulador de ecommerce donde puedes registrarte y adquirir el rol de <strong>Usuario Común</strong>, que te permite simular la compra de productos.
+    </p>
+    <p style="font-size: 1rem; color: #666; max-width: 800px; margin: 20px auto;">
+        Además, puedes actualizar tu rol a <strong>Premium</strong> en el apartado de <em>My Profile</em>, lo que te permitirá agregar productos a la tienda.
+    </p>
+    <p style="font-size: 1rem; color: #666; max-width: 800px; margin: 20px auto;">
+        Para probar las funciones de un <strong>SuperAdmin</strong>, puedes utilizar el siguiente correo y contraseña:
+    </p>
+    <ul style="font-size: 1.1rem; color: #444; text-align: left; max-width: 800px; margin: 20px auto; list-style-type: none; padding-left: 0;">
+        <li><strong>Email:</strong> super@admin.com</li>
+        <li><strong>Contraseña:</strong> superAdmin123</li>
+    </ul>
+    <p style="font-size: 1rem; color: #666; max-width: 800px; margin: 20px auto;">
+        Los SuperAdmins tienen acceso completo para agregar y eliminar productos, así como gestionar usuarios (agregar, eliminar o actualizar sus roles).
+    </p>
+
+    <h4 style="font-size: 1.3rem; color: #333;">Vistas de la Aplicación</h4>
+    <p style="font-size: 1rem; color: #666; max-width: 800px; margin: 20px auto;">
+        Las vistas de esta aplicación se crearon utilizando Handlebars, lo que permite una integración eficiente entre el backend y el frontend.
+        Ten en cuenta que estas vistas se desarrollaron principalmente para facilitar el testeo y demostración de las funcionalidades del sistema.
+    </p>
 </div>

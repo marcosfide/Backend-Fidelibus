@@ -1,34 +1,36 @@
-<div>
-    <h1>Detalles del Ticket</h1>
-    <div>
+<div style="max-width: 900px; margin: 2rem auto; padding: 2rem; background-color: #ffffff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+    <h1 style="text-align: center; color: #1976D2; font-size: 2rem; margin-bottom: 2rem;">Detalles del Ticket</h1>
+    
+    <div style="font-size: 1.1rem; color: #333;">
         <p><strong>ID:</strong> {{ticket._id}}</p>
         <p><strong>Código:</strong> {{ticket.code}}</p>
         <p><strong>Comprador:</strong> {{ticket.purchaser}}</p>
         <p><strong>Fecha:</strong> {{ticket.purchase_datatime}}</p>
+
+        <h4 style="color: #1976D2; font-size: 1.3rem; margin-top: 2rem;">Productos</h4>
         
-        <h4>Productos</h4>
-        <table border="1" cellspacing="1" cellpadding="2" style="font-size: small">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio por unidad</th>
-                    <th>Total</th>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+            <thead style="background-color: #f1f1f1;">
+                <tr style="text-align: left; color: #1976D2;">
+                    <th style="padding: 0.8rem; border: 1px solid #ddd;">Producto</th>
+                    <th style="padding: 0.8rem; border: 1px solid #ddd;">Cantidad</th>
+                    <th style="padding: 0.8rem; border: 1px solid #ddd;">Precio por unidad</th>
+                    <th style="padding: 0.8rem; border: 1px solid #ddd;">Total</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="font-size: 1rem; color: #555;">
                 {{#each ticket.products}}
                 <tr>
-                    <td>{{productName}}</td>
-                    <td>{{productQuantity}}</td>
-                    <td>${{productPrice}}</td>
-                    <td>${{productTotalAmount}}</td>
+                    <td style="padding: 0.8rem; border: 1px solid #ddd;">{{productName}}</td>
+                    <td style="padding: 0.8rem; border: 1px solid #ddd;">{{productQuantity}}</td>
+                    <td style="padding: 0.8rem; border: 1px solid #ddd;">${{productPrice}}</td>
+                    <td style="padding: 0.8rem; border: 1px solid #ddd;">${{productTotalAmount}}</td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
         
-        <p><strong>Total del Ticket:</strong> ${{ticket.amount}}</p>
+        <p style="font-weight: bold; margin-top: 1.5rem;"><strong>Total del Ticket:</strong> ${{ticket.amount}}</p>
         <p><strong>Observaciones:</strong> {{ticket.observations}}</p>
     </div>
 </div>

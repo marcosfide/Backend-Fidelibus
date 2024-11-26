@@ -1,20 +1,47 @@
-<div>
-    <form action="/api/users/register" method="post" enctype="application/x-www-form-urlencoded">
-        <label for="_f_name">First name:</label>
-        <input type="text" name="firstName" id="_f_name" required="true">
+<div style="max-width: 600px; margin: 2rem auto; padding: 2rem; background-color: #ffffff; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+    <style>
+        a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
 
-        <label for="_l_name">Last name:</label>
-        <input type="text" name="lastName" id="_l_name" required="true">
+        a:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+            text-decoration: underline;
+        }
 
-        <label for="_age">Age:</label>
-        <input type="number" name="age" id="_age" required="true">
+        a.logout:hover {
+            background-color: #e63939;
+            transform: scale(1.1);
+        }
+    </style>
+    <h2 style="text-align: center; color: #388E3C; font-size: 1.5rem; margin-bottom: 1.5rem;">Registro de Usuario</h2>
+    
+    <form action="/api/users/register" method="post" enctype="application/x-www-form-urlencoded" style="display: flex; flex-direction: column; gap: 1.5rem;">
         
-        <label for="_email">Email:</label>
-        <input type="email" name="email" id="_email" required="true">
+        <label for="_f_name" style="font-size: 1rem; color: #333;">First name:</label>
+        <input type="text" name="firstName" id="_f_name" required="true" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; color: #333;">
 
-        <label for="_pass">Password:</label>
-        <input type="password" name="password" id="_pass" required="true">
+        <label for="_l_name" style="font-size: 1rem; color: #333;">Last name:</label>
+        <input type="text" name="lastName" id="_l_name" required="true" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; color: #333;">
 
-        <button type="submit">Register</button>
+        <label for="_age" style="font-size: 1rem; color: #333;">Age:</label>
+        <input type="number" name="age" id="_age" required="true" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; color: #333;">
+        
+        <label for="_email" style="font-size: 1rem; color: #333;">Email:</label>
+        <input type="email" name="email" id="_email" required="true" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; color: #333;">
+
+        <label for="_pass" style="font-size: 1rem; color: #333;">Password:</label>
+        <input type="password" name="password" id="_pass" required="true" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; color: #333;">
+        
+        <button type="submit" style="padding: 0.8rem 1.5rem; background-color: #388E3C; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;">
+            Register
+        </button>
     </form>
 </div>

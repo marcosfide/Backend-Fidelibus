@@ -1,23 +1,50 @@
-<div style="display: flex;justify-content: space-around; font-weight: 600; margin: 1.2rem;">
-    <a href="/">Inicio</a>
-    <a href="/profile">My Profile</a>
-    <a href="/products">Products</a>
-    <a href="/api/session/logout">Logout</a>
-</div>
-<h1>Bienvenido {{firstName}} {{lastName}}! {{email}}</h1>
-<h2>{{ title }}</h2>
-<div class="card-product">
-    <ul>
-        <li>
-            <h3>Nombre: {{product.title}}</h3>
-            <h5>Descripción: {{product.description}}</h5>
-            <h5>Precio: {{product.price}}</h5>
-            <h5>Stock: {{product.stock}}</h5>
-            <h5>Imagen: {{product.thumbnail}}</h5>
-            <h5>Codigo: {{product.code}}</h5>
-        </li>
-    </ul>
+<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; font-weight: 600; margin: 1.2rem; background-color: #4CAF50; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <style>
+        a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        a:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+            text-decoration: underline;
+        }
+
+        a.logout:hover {
+            background-color: #e63939;
+            transform: scale(1.1);
+        }
+    </style>
+    <a href="/" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Inicio</a>
+    <a href="/profile" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">My Profile</a>
+    <a href="/products" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Products</a>
+    <a href="/api/session/logout" style="color: #ff3232; text-decoration: none; margin-left: 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #ffffff; border: 2px solid #ff3232;">Logout</a>
 </div>
 
+<div style="margin: 2rem auto; width: 90%; max-width: 800px; padding: 2rem; background-color: #fff; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+    <h1 style="text-align: center; color: #333;">Bienvenido {{firstName}} {{lastName}}!</h1>
+    <h3 style="text-align: center; color: #666;">Email: {{email}}</h3>
+    <h2 style="text-align: center; color: #333; margin-top: 1rem;">{{ title }}</h2>
+    
+    <div class="card-product" style="margin-top: 2rem; padding: 1rem; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
+        <h3 style="text-align: center; color: #388E3C;">Detalles del Producto</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
+                <h4 style="color: #333; font-size: 1.1rem;">Nombre: <span style="color: #388E3C;">{{product.title}}</span></h4>
+                <h5 style="color: #666;">Descripción: {{product.description}}</h5>
+                <h5 style="color: #666;">Precio: ${{product.price}}</h5>
+                <h5 style="color: #666;">Stock: {{product.stock}}</h5>
+                <h5 style="color: #666;">Imagen: {{product.thumbnail}}</h5>
+                <h5 style="color: #666;">Código: {{product.code}}</h5>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <script src="/js/product.js"></script>

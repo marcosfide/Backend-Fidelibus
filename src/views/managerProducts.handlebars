@@ -1,98 +1,119 @@
-<div style="display: flex;justify-content: space-around; font-weight: 600; margin: 1.2rem; background-color: #8080808f; padding: 1rem">
-    <a href="/">Inicio</a>
-    <a href="/profile">My Profile</a>
-    <a href="/products">Products</a>
-    
+<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; font-weight: 600; margin: 1.2rem; background-color: #4CAF50; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <style>
+        a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        a:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+            text-decoration: underline;
+        }
+
+        a.logout:hover {
+            background-color: #e63939;
+            transform: scale(1.1);
+        }
+    </style>
+    <a href="/" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Inicio</a>
+    <a href="/profile" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">My Profile</a>
+    <a href="/products" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Products</a>
+
     {{#if isNotAdmin}}
-    <a href="/cart">Cart</a>
+    <a href="/cart" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Cart</a>
     {{#if isPremium}}
-    <a href="/productsManager">My Products</a>
+    <a href="/productsManager" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">My Products</a>
     {{/if}}
-    {{/if}}
-    
-    {{#if isAdmin}}
-    <a href="/productsManager">Product Manager</a>
-    <a href="/usersManager">Users Manager</a>
     {{/if}}
 
-    <a href="/api/session/logout" style="color: #ff3232;">Logout</a>
+    {{#if isAdmin}}
+    <a href="/productsManager" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Product Manager</a>
+    <a href="/usersManager" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Users Manager</a>
+    {{/if}}
+
+    <a href="/api/session/logout" style="color: #ff3232; text-decoration: none; margin-left: 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #ffffff; border: 2px solid #ff3232;">Logout</a>
 </div>
-<div class="products-list">
-    <h1>Listado de productos</h1>
+
+<div class="products-list" style="margin: 2rem auto; width: 90%; max-width: 1200px; padding: 2rem; background-color: #fff; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+    <h1 style="text-align: center; color: #333;">Listado de Productos</h1>
     <div class="card-product">
-        <table>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem;">
             <thead>
-                <tr>
-                    <td>Nombre: </td>
-                    <td>Descripción:</td>
-                    <td>Precio:</td>
-                    <td>Stock:</td>
-                    <td>Imagen: </td>
-                    <td>Codigo:</td>
-                    <td>Dueño:</td>
-                    <td>Eliminar:</td> 
+                <tr style="background-color: #388E3C; color: white;">
+                    <th style="padding: 10px; text-align: left;">Nombre</th>
+                    <th style="padding: 10px; text-align: left;">Descripción</th>
+                    <th style="padding: 10px; text-align: left;">Precio</th>
+                    <th style="padding: 10px; text-align: left;">Stock</th>
+                    <th style="padding: 10px; text-align: left;">Imagen</th>
+                    <th style="padding: 10px; text-align: left;">Código</th>
+                    <th style="padding: 10px; text-align: left;">Dueño</th>
+                    <th style="padding: 10px; text-align: left;">Eliminar</th> 
                 </tr>
             </thead>
-            <tbody class="container" id="productsFeed">
+            <tbody id="productsFeed">
                 {{#each products}}
-                    <tr data-product-id="{{this._id}}">
-                        <td> {{this.title}}</td>
-                        <td> {{this.description}}</td>
-                        <td> {{this.price}}</td>
-                        <td> {{this.stock}}</td>
-                        <td> {{this.thumbnail}}</td>
-                        <td> {{this.code}}</td>
-                        <td> {{this.owner}}</td>
-                        <td>
-                            <form method="post" action="/api/products/{{this._id}}?_method=DELETE"  class="btn-eliminar">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
+                <tr data-product-id="{{this._id}}" style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px;">{{this.title}}</td>
+                    <td style="padding: 10px;">{{this.description}}</td>
+                    <td style="padding: 10px;">${{this.price}}</td>
+                    <td style="padding: 10px;">{{this.stock}}</td>
+                    <td style="padding: 10px;">{{this.thumbnail}}</td>
+                    <td style="padding: 10px;">{{this.code}}</td>
+                    <td style="padding: 10px;">{{this.owner}}</td>
+                    <td style="padding: 10px;">
+                        <form method="post" action="/api/products/{{this._id}}?_method=DELETE" class="btn-eliminar">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" style="background-color: #ff3232; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
                 {{/each}}
             </tbody>
         </table>
     </div>
-    <div class="div-pagination">
-        <h5><a href="{{prevLink}}">Página Anterior</a></h5>
-        <h5>Página {{page}} de {{totalPages}}</h5>
-        <h5><a href="{{nextLink}}">Página Siguiente</a></h5>
+
+    <div class="div-pagination" style="display: flex; justify-content: space-between; align-items: center;">
+        <a href="{{prevLink}}" style="color: #388E3C; text-decoration: none; font-size: 1rem;">Página Anterior</a>
+        <h5 style="color: #333;">Página {{page}} de {{totalPages}}</h5>
+        <a href="{{nextLink}}" style="color: #388E3C; text-decoration: none; font-size: 1rem;">Página Siguiente</a>
     </div>
 </div>
-<div class="product-form">
-    <h1>{{this.title}}</h1>
-    <form action="/api/products" method="post">
 
-        <label for="title">Nombre</label>
-        <input type="text" name="title" id="inputTitle">
+<div class="product-form" style="margin: 2rem auto; width: 90%; max-width: 600px; padding: 2rem; background-color: #fff; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+    <h1 style="text-align: center; color: #333;">Agregar Producto</h1>
+    <form action="/api/products" method="post" style="display: flex; flex-direction: column; gap: 1rem;">
+        <label for="title" style="color: #333; font-size: 1rem;">Nombre</label>
+        <input type="text" name="title" id="inputTitle" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
 
-        <label for="description">Descripcion</label>
-        <input type="text" name="description" id="inputDescription">
+        <label for="description" style="color: #333; font-size: 1rem;">Descripción</label>
+        <input type="text" name="description" id="inputDescription" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
 
-        <label for="code">Código</label>
-        <input type="text" name="code" id="inputCode">
+        <label for="code" style="color: #333; font-size: 1rem;">Código</label>
+        <input type="text" name="code" id="inputCode" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
 
-        <label for="price">Precio</label>
-        <input type="number" name="price" id="inputPrice">
-    
-        <div>
-            <label for="status">Estado</label>
-            <input type="checkbox" name="status" id="inputStatus" value="true">
-            <label for="status">Activo</label>
+        <label for="price" style="color: #333; font-size: 1rem;">Precio</label>
+        <input type="number" name="price" id="inputPrice" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
+
+        <div style="display: flex; align-items: center;">
+            <label for="status" style="font-size: 1rem; margin-right: 10px;">Activo</label>
+            <input type="checkbox" name="status" id="inputStatus" value="true" style="margin-right: 10px;">
         </div>
 
+        <label for="stock" style="color: #333; font-size: 1rem;">Stock</label>
+        <input type="number" name="stock" id="inputStock" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
 
-        <label for="stock">Stock</label>
-        <input type="number" name="stock" id="inputStock">
+        <label for="category" style="color: #333; font-size: 1rem;">Categoría</label>
+        <input type="text" name="category" id="inputCategory" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
 
-        <label for="category">Categoria</label>
-        <input type="text" name="category" id="inputCategory">
+        <label for="thumbnail" style="color: #333; font-size: 1rem;">Imagen</label>
+        <input type="text" name="thumbnail" id="inputThumbnail" style="padding: 10px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; width: 100%; box-sizing: border-box;">
 
-        <label for="thumbnail">Img</label>
-        <input type="text" name="thumbnail" id="inputThumbnail">
-
-        <button type="submit" id="sendProduct">Agregar producto</button>
-
+        <button type="submit" id="sendProduct" style="background-color: #388E3C; color: white; border: none; padding: 12px 0; border-radius: 5px; cursor: pointer;">Agregar producto</button>
     </form>
 </div>

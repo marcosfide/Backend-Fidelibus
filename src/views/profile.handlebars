@@ -1,56 +1,83 @@
-<div style="display: flex; justify-content: space-around; font-weight: 600; margin: 1.2rem; background-color: #8080808f; padding: 1rem">
-    <a href="/">Inicio</a>
-    <a href="/profile">My Profile</a>
-    <a href="/products">Products</a>
-    
+<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; font-weight: 600; margin: 1.2rem; background-color: #4CAF50; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <style>
+        a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        a:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+            text-decoration: underline;
+        }
+
+        a.logout:hover {
+            background-color: #e63939;
+            transform: scale(1.1);
+        }
+    </style>
+    <a href="/" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Inicio</a>
+    <a href="/profile" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">My Profile</a>
+    <a href="/products" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Products</a>
+
     {{#if isNotAdmin}}
-    <a href="/cart">Cart</a>
+    <a href="/cart" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Cart</a>
     {{#if isPremium}}
-    <a href="/productsManager">My Products</a>
+    <a href="/productsManager" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">My Products</a>
     {{/if}}
-    {{/if}}
-    
-    {{#if isAdmin}}
-    <a href="/productsManager">Product Manager</a>
-    <a href="/usersManager">Users Manager</a>
     {{/if}}
 
-    <a href="/api/session/logout" style="color: #ff3232;">Logout</a>
+    {{#if isAdmin}}
+    <a href="/productsManager" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Product Manager</a>
+    <a href="/usersManager" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #388E3C;">Users Manager</a>
+    {{/if}}
+
+    <a href="/api/session/logout" style="color: #ff3232; text-decoration: none; margin-left: 15px; font-size: 1rem; padding: 10px 20px; border-radius: 5px; background-color: #ffffff; border: 2px solid #ff3232;">Logout</a>
 </div>
 
-<div>
-    <h1>Bienvenido {{user.firstName}} {{user.lastName}}</h1>
-    <h2>Datos del perfil</h2>
-    <div>Rol: {{user.rol}}</div>
-    <div>Edad: {{user.age}}</div>
-    <div>Email: {{user.email}}</div>
+<div style="margin: 2rem auto; width: 90%; max-width: 1000px; padding: 2rem; background-color: #fff; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+    <h1 style="text-align: center; color: #333;">Bienvenido {{user.firstName}} {{user.lastName}}</h1>
+    <h2 style="text-align: center; color: #666; margin-top: 1rem;">Datos del perfil</h2>
+    
+    <div style="margin-top: 20px; font-size: 1rem; color: #333;">
+        <strong>Rol:</strong> {{user.rol}} <br>
+        <strong>Edad:</strong> {{user.age}} <br>
+        <strong>Email:</strong> {{user.email}} <br>
+    </div>
+
     {{#if isNotAdmin}}
-    <form action="/api/users/premium/{{user.id}}" method="POST" style="display: inline;">
-        <button type="submit">Cambiar rol</button>
+    <form action="/api/users/premium/{{user.id}}" method="POST" style="display: inline; margin-top: 20px;">
+        <button type="submit" style="background-color: #388E3C; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Cambiar rol</button>
     </form>
     {{/if}}
-    <div style="margin: 5px 0;">
+
+    <div style="margin: 20px 0;">
         <form action="/api/users/{{user.id}}/documents" method="POST" enctype="multipart/form-data" style="display: inline;">
-            <label>Imagen:</label>
-            <input type="file" name="image">
-            <button type="submit">Cargar imagen</button>
+            <label for="image" style="font-size: 1rem; color: #333;">Imagen:</label>
+            <input type="file" name="image" id="image" style="margin-left: 10px; padding: 5px; font-size: 1rem;">
+            <button type="submit" style="background-color: #388E3C; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Cargar imagen</button>
         </form>
     </div>
 
     <!-- Mostrar imágenes de documentos -->
     {{#if user.documents.length}}
-        <div>
-            <h3>Imágenes Cargadas:</h3>
-            <ul>
-                {{#each user.documents}}
-                    <li>
-                        <div>Nombre: {{this.name}}</div>
-                        <img src="{{this.reference}}" alt="{{this.name}}" style="max-width: 200px;">
-                    </li>
-                {{/each}}
-            </ul>
-        </div>
+    <div style="margin-top: 20px;">
+        <h3 style="font-size: 1.2rem; color: #388E3C;">Imágenes Cargadas:</h3>
+        <ul style="list-style: none; padding: 0;">
+            {{#each user.documents}}
+            <li style="margin-bottom: 15px;">
+                <div><strong>Nombre:</strong> {{this.name}}</div>
+                <img src="{{this.reference}}" alt="{{this.name}}" style="max-width: 200px; margin-top: 10px; border-radius: 5px;">
+            </li>
+            {{/each}}
+        </ul>
+    </div>
     {{else}}
-        <div>No hay imágenes cargadas</div>
+    <div style="margin-top: 20px; font-size: 1rem; color: #888;">No hay imágenes cargadas</div>
     {{/if}}
 </div>
