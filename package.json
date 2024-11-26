@@ -5,15 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "local": "vercel dev", 
-    "start": "node api/app.js",
-    "dev": "vercel dev",
-    "build": "echo 'No build step required'"
+    "local": "nodemon -r dotenv/config src/App.js",
+    "start": "node src/App.js",
+    "dev": "nodemon src/App.js"
   },
   "author": "Marcos Fidelibus",
   "license": "ISC",
   "dependencies": {
-    "@faker-js/faker": "^8.4.1",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
@@ -36,7 +34,8 @@
     "socket.io": "^4.7.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "@faker-js/faker": "^8.4.1"
   },
   "devDependencies": {
     "chai": "^5.1.1",
