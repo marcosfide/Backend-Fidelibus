@@ -20,6 +20,29 @@
             background-color: #e63939;
             transform: scale(1.1);
         }
+
+        footer {
+            margin-top: 2rem;
+            background-color: #333;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0;
+            font-size: 15px; 
+            padding: 0
+        }
+
+        footer a:hover {
+            background-color: #333;
+            color: #45a049;
+            text-decoration: underline;
+        }
     </style>
     {{#if isNotLoggedIn}}
     <a href="/login" style="color: white; margin: 0 15px; text-decoration: none; font-size: 18px; padding: 8px 16px; border-radius: 5px;">Login</a>
@@ -86,3 +109,12 @@
         Ten en cuenta que estas vistas se desarrollaron principalmente para facilitar el testeo y demostración de las funcionalidades del sistema.
     </p>
 </div>
+
+<footer>
+    <p>© 2024 Proyecto de Backend. Todos los derechos reservados.</p>
+    <p>Desarrollado por Marcos Fidelibus utilizando las tecnologías de 
+        <a href="https://nodejs.org/" target="_blank">Node.js</a>, 
+        <a href="https://expressjs.com/" target="_blank">Express</a> y 
+        <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.
+    </p>
+</footer>
